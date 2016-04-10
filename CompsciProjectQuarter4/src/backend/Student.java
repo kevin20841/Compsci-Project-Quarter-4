@@ -1,6 +1,6 @@
 package backend;
 
-public class Student{
+public class Student implements Comparable{
 	// fields
 	private String name;
 	private int grade;
@@ -12,6 +12,11 @@ public class Student{
 		name = n.toLowerCase();
 		grade = (Integer) g;
 		studentID = sID;
+	}
+	
+	public int compareTo(Object o) {
+		
+		return ((Student) o).getStudentID() - studentID;
 	}
 	
 	//getters
@@ -26,6 +31,9 @@ public class Student{
 	public int getStudentID() {
 		return studentID;
 	}
+
+
+
 	
 	
 }
