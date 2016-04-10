@@ -23,8 +23,12 @@ public class studentList {
             Student x = data.get((i + j) / 2);
 
             do {
-                while (data.get(i).compareTo(x) < 0) i++;
-                while (x.compareTo(data.get(j)) < 0) j--;
+                while (data.get(i).compareTo(x) < 0) {
+                	i++;
+                }
+                while (x.compareTo(data.get(j)) < 0) {
+                	j--;
+                }
 
                 if ( i <= j) {
                 	Student tmp = data.get(i);
