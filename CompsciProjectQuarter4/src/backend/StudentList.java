@@ -3,7 +3,7 @@ package backend;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-//TODO Implement Binary Search, and Quicksort.  
+
 public class StudentList {
 	private Map <String, Student> nameMap;
 	private Map <Integer, Student> studentIDMap;
@@ -27,6 +27,21 @@ public class StudentList {
 	
 	public Student getStudentData(String name){
 		return new Student(nameMap.get(name));
+	}
+	
+	//returns ordered names TODO
+	public ArrayList<String> getNameList(){
+		ArrayList<String> res = new ArrayList<String>();
+		res.addAll(nameMap.keySet());
+		sort(res, 0, res.size());
+		return res;
+	}
+	//returns ordered ID's TODO 
+	public ArrayList<Integer> getIDList(){
+		ArrayList<Integer> res = new ArrayList<Integer>();
+		res.addAll(studentIDMap.keySet());
+		sort(res, 0, res.size());
+		return res;
 	}
 	
 	//Quicksorts the studentList
