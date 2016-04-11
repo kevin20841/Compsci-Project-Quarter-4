@@ -14,6 +14,12 @@ public class Student implements Comparable{
 		studentID = sID;
 	}
 	
+	public Student(Student student) {
+		name = student.name;
+		grade = student.grade;
+		studentID = student.studentID;
+	}
+
 	public int compareTo(Object o) {
 		
 		return ((Student) o).getStudentID() - studentID;
