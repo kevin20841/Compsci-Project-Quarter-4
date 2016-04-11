@@ -1,3 +1,20 @@
+/**
+ * Returns an Image object that can then be painted on the screen. 
+ * The url argument must specify an absolute {@link URL}. The name
+ * argument is a specifier that is relative to the url argument. 
+ * <p>
+ * This method always returns immediately, whether or not the 
+ * image exists. When this applet attempts to draw the image on
+ * the screen, the data will be loaded. The graphics primitives 
+ * that draw the image will incrementally paint on the screen. 
+ *
+ * @param  url  an absolute URL giving the base location of the image
+ * @param  name the location of the image, relative to the url argument
+ * @return      the image at the specified URL
+ * @see         Image
+ */
+
+//TODO Start writing Javadoc
 package backend;
 
 import java.util.ArrayList;
@@ -29,14 +46,14 @@ public class StudentList {
 		return new Student(nameMap.get(name));
 	}
 	
-	//returns ordered names TODO
+	//returns ordered names 
 	public ArrayList<String> getNameList(){
 		ArrayList<String> res = new ArrayList<String>();
 		res.addAll(nameMap.keySet());
 		sort(res, 0, res.size());
 		return res;
 	}
-	//returns ordered ID's TODO 
+	//returns ordered ID's 
 	public ArrayList<Integer> getIDList(){
 		ArrayList<Integer> res = new ArrayList<Integer>();
 		res.addAll(studentIDMap.keySet());
