@@ -8,6 +8,10 @@ public class Student implements Comparable{
 	private String name;
 	private int grade;
 	private int studentID;
+	private String arrivalReason;
+	private String arrivalNote;
+	private String earlyDepartureReason;
+	private String EarlyDepartureNote;
 	
 	/**
 	 *  Constructor. name is lower case so that compareTo for strings arranges by alphabetical order. studentID is Integer wrapper class for same reason.
@@ -60,7 +64,39 @@ public class Student implements Comparable{
 	public int getStudentID() {
 		return studentID;
 	}
+	/**
+	 * Gets Arrival reason of student
+	 * @return Arrival reason of student.
+	 */
+	public String getArrivalReason() {
+		return arrivalReason;
+	}
+	
+	/**
+	 * Gets arrival note location of student
+	 * @return Arrival note location of student.
+	 */
 
+	public String getArrivalNote() {
+		return arrivalNote;
+	}
+
+	/**
+	 * Gets Reason for early departure of student
+	 * @return Gets reason for early departure of student.
+	 */
+	
+	public String getEarlyDepartureReason() {
+		return earlyDepartureReason;
+	}
+	
+	/**
+	 * Gets early departure note location of student
+	 * @return Early departure note location of student.
+	 */
+	public String getEarlyDepartureNote() {
+		return EarlyDepartureNote;
+	}
 
 
 	
