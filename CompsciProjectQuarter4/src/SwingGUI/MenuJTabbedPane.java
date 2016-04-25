@@ -2,7 +2,6 @@ package SwingGUI;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-// TODO Implement closing tabs
 public class MenuJTabbedPane extends JPanel {
 	private JTabbedPane jtp;
 	public MenuJTabbedPane(){

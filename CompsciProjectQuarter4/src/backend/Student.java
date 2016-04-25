@@ -38,7 +38,6 @@ public class Student implements Comparable{
 	/**
 	 * compareTo. Compares by size of studentID.
 	 */
-	@Override
 	public int compareTo(Object o) {
 		return ((Student) o).getStudentID() - studentID;
 	}
