@@ -28,7 +28,7 @@ public class StartApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Tabs"); //TODO Title
+		primaryStage.setTitle("Office Sign In"); //TODO Title
 		Group root = new Group();
 		Scene scene = new Scene(root, 400, 250, Color.WHITE);
 

@@ -7,8 +7,8 @@ public class MenuTabPane extends TabPane{
 
 	public MenuTabPane(){
 		setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-		StartTab init = new StartTab("Start");
-		getTabs().add(init);
+		StartTab init = new StartTab(this, "Start");
+		getTabs().addAll(init);
 	}
-	
+
 }
