@@ -16,6 +16,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>src/css/fextile.css</name>
+			<type>1</type>
+			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/css/fextile.css</location>
+		</link>
+		<link>
 			<name>src/img/image.png</name>
 			<type>1</type>
 			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/img/image.png</location>

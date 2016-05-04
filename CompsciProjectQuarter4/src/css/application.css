@@ -1,0 +1,21 @@
+.searchTextField{
+   -fx-font-size: 12pt;
+   -fx-font-family: "Courier New";
+}
+
+.root{
+	-fx-font-family: "Avenir";
+}
+
+.alertError{
+	-fx-background-color: #b94a48;
+	-fx-border-color: #b94a48;
+	-fx-padding: 8px 35px 8px 14px;
+	-fx-margin-bottom: 18px;
+
+}
+
+.alertText{
+	-fx-text-fill: #f2dede;
+	
+}

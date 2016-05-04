@@ -39,7 +39,7 @@ public class StudentList {
 	 * @param	sID		The Student ID to be searched.
 	 * @return	Returns the Student with that studentID
 	 */
-	public Student getStudentData(int sID){
+	public Student getStudent(int sID){
 		return new Student(studentIDMap.get(sID));
 	}
 	
@@ -48,18 +48,30 @@ public class StudentList {
 	 * @param 	name	The name to be searched.
 	 * @return	Returns the Student with that name.
 	 */
-	public Student getStudentData(String name){
+	public Student getStudent(String name){
 		return new Student(nameMap.get(name));
 	}
 	
 	/**
-	 * Gets ordered list of names.
+	 * Gets list of names.
 	 * @return	Returns <code> ArrayList &lt;String&gt; </code> in lexigraphic order, all lowercase. 
 	 */
 	public ArrayList<String> getNameList(){
 		ArrayList<String> res = new ArrayList<String>();
 		res.addAll(nameMap.keySet());
-		sort(res, 0, res.size());
+		// sort(res, 0, res.size());
+		return res;
+	}
+	/**
+	 * Gets list of ID + name + grade. 
+	 * @return	Returns <code> ArrayList &lt;String&gt;	 </code>  in numerical order,
+	 */
+	public ArrayList<String> getInfoList(){
+		ArrayList<String> res = new ArrayList<String>();
+		for (Student student: nameMap.values()){
+			res.add(student.toString());
+		}
+		// sort(res, 0, res.size());
 		return res;
 	}
 	/**
@@ -69,10 +81,13 @@ public class StudentList {
 	public ArrayList<Integer> getIDList(){
 		ArrayList<Integer> res = new ArrayList<Integer>();
 		res.addAll(studentIDMap.keySet());
-		sort(res, 0, res.size());
+		// sort(res, 0, res.size());
 		return res;
 	}
-	
+	public ArrayList<Student> getStudentList(){
+		return (ArrayList<Student>) nameMap.values();
+		
+	}
 	/**
 	 * Generic quicksort. 
 	 * @param	data	ArrayList of Comparable objects

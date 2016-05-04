@@ -1,12 +1,17 @@
 package JavaFXGUI;
 
+import backend.Student;
+import backend.StudentList;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.*;
 
 @SuppressWarnings("restriction")
 public class StartTab extends Tab {
 	private MenuTabPane parent;
+	private StudentList studentData =  readStudentDatabase();
 	public StartTab(MenuTabPane p, String title){
 		parent = p;
 		setText(title);
@@ -18,10 +23,14 @@ public class StartTab extends Tab {
 		buttonHBox.setSpacing(10);
 		
 		HBox viewButtonHBox = new HBox();
+		viewButtonHBox.setPadding(new Insets(15, 12, 15, 12));
+		viewButtonHBox.setSpacing(10);
+		
 		
 		Button buttonSignIn = new Button("Sign In");
 		buttonSignIn.setPrefSize(200, 40);
 		buttonSignIn.setOnAction(e -> createEnterIdTab(true));
+
 		
 		Button buttonSignOut = new Button("Sign Out");
 		buttonSignOut.setPrefSize(200, 40);
@@ -36,16 +45,24 @@ public class StartTab extends Tab {
 		content.setCenter(buttonHBox);
 		content.setBottom(viewButtonHBox);
 		setContent(content);
+		
 	}
 	
 	private void createEnterIdTab(boolean signIn){
-		EnterIDTab tab2 = new EnterIDTab(parent, "Enter ID", signIn);
+		EnterInfoTab tab2 = new EnterInfoTab(parent, this, "Enter ID",  studentData, signIn);
 		setDisable(true);
 		parent.getTabs().add(tab2);
 		parent.getSelectionModel().select(tab2);
 		
 	}
-	public void die(){
-		parent.getTabs().remove(this);
+	//TODO Implement importing database
+	private StudentList readStudentDatabase(){
+		StudentList stData = new StudentList();
+	
+		for (int i = 0; i < 12000; i++){
+			stData.add(new Student("test" + i, i % 10 ,i));
+		}
+		return stData;
 	}
+
 }

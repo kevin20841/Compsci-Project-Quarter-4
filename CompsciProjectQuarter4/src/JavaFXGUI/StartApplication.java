@@ -30,13 +30,13 @@ public class StartApplication extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Office Sign In"); //TODO Title
 		Group root = new Group();
-		Scene scene = new Scene(root, 400, 250, Color.WHITE);
-
+		Scene scene = new Scene(root, 1200, 750, Color.WHITE);
 		MenuTabPane tabPane = new MenuTabPane();
 
 		BorderPane borderPane = new BorderPane();
 		
-		// bind to take available space
+		scene.getStylesheets().add("css/application.css");
+		
 		borderPane.prefHeightProperty().bind(scene.heightProperty());
 		borderPane.prefWidthProperty().bind(scene.widthProperty());
 

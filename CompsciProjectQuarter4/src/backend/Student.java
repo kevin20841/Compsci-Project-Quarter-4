@@ -21,7 +21,7 @@ public class Student implements Comparable{
 	 */
 	
 	public Student(String n, int g, int sID){
-		name = n.toLowerCase();
+		name = n;
 		grade = (Integer) g;
 		studentID = sID;
 	}
@@ -97,6 +97,10 @@ public class Student implements Comparable{
 		return EarlyDepartureNote;
 	}
 
+	public String toString(){
+		return  String.format("%-15d", studentID) + String.format("%-25s", name) +grade;
+	}
+	
 
 	
 	
