@@ -3,6 +3,7 @@
    -fx-font-family: "Courier New";
 }
 
+
 .root{
 	-fx-font-family: "Avenir";
 }
@@ -17,5 +18,116 @@
 
 .alertText{
 	-fx-text-fill: #f2dede;
-	
+}
+
+alertError{
+	-fx-background-color: #b94a48;
+	-fx-border-color: #b94a48;
+	-fx-padding: 8px 35px 8px 14px;
+	-fx-margin-bottom: 18px;
+
+}
+.button {
+  -fx-border-radius: 4px;
+  -fx-background-radius: 4px;
+  -fx-padding: 6px 12px 6px 12px;
+  -fx-text-fill: #ffffff;
+  -fx-background-color: #428bca;
+  -fx-border-color: #357ebd;
+  -fx-font-size: 14px;
+}
+.button:hover {
+  -fx-text-fill: #ffffff;
+  -fx-background-color: #3276b1;
+  -fx-border-color: #285e8e;
+}
+.button:disabled {
+  -fx-background-color: #428bca;
+  -fx-border-color: #357ebd;
+}
+.button:armed {
+  -fx-text-fill: #ffffff !important;
+  -fx-background-color: #286090 !important; 
+  -fx-border-color: #204d74 !important;
+
+}
+.tab{
+	-fx-background-color: #FFF;
+	-fx-border-color: #eeeeee;
+	-fx-padding-left: 5;
+	-fx-padding-right: 4;
+	-fx-border-width: 1 1 1 1;
+	-fx-border-radius: 3 3 0 0;
+}
+
+
+
+.list-view {
+	-fx-background-color:transparent;
+}
+
+.scroll-bar{
+ -fx-background-color: rgb(96,96,96);
+ -fx-background-radius: 2em;
+}
+.scroll-bar:vertical .track {
+ -fx-background-color: transparent;
+ -fx-border-color:transparent;
+ -fx-background-radius: 2em;
+}
+.scroll-bar:vertical .track-background {
+ -fx-background-color: transparent;
+ -fx-background-insets: 0;
+ -fx-background-radius: 2em;
+}
+
+.scroll-bar:vertical .thumb {
+ -fx-background-color: rgb(211,211,211);
+ -fx-background-insets: 0 4 0 4;
+ -fx-background-radius: 2em;
+}
+
+.scroll-bar:vertical .thumb:hover {
+ -fx-background-color: rgb(231,231,231);
+}
+
+.scroll-bar:vertical .thumb:pressed {
+ -fx-background-color: rgb(255,255,255);
+}
+.scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
+ -fx-background-color:transparent;
+ -fx-background-radius: 2em;
+ -fx-padding: 5;
+}
+
+
+
+.scroll-bar:vertical .increment-arrow {
+ -fx-background-color: rgb(211,211,211);
+ -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
+ -fx-padding: 0.25em;
+ -fx-rotate: 0;
+}
+
+.scroll-bar:vertical .decrement-arrow {
+ -fx-background-color: rgb(211,211,211);
+ -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
+ -fx-padding: 0.25em;
+ -fx-rotate: -180;
+}
+.scroll-bar:vertical .increment-arrow:hover, .scroll-bar:vertical .decrement-arrow:hover{
+	-fx-background-color: rgb(231,231,231);
+}
+
+.scroll-bar:vertical .increment-arrow:pressed, .scroll-bar:vertical .decrement-arrow:pressed{
+	-fx-background-color: #FFF;
+}
+.scroll-bar:vertical:focused,
+.scroll-bar:horizontal:focused {
+ -fx-background-color: transparent,rgb(96,96,96),rgb(96,96,96);
+}
+
+
+.tab-header-background{
+	-fx-background-color: rgb(231,231,231);
 }

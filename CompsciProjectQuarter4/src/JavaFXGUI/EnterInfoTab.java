@@ -26,13 +26,14 @@ public class EnterInfoTab extends Tab {
 	private MenuTabPane parent;
 	private Tab previous;
 	private ObservableList<String> nameEntries;  
-	private ListView<String> list = new ListView();
+	private ListView<String> list;
 	private StudentList studentData;
 	private TextField searchTextField;
-	private SequentialTransition seqT;
+	private AnimatedAlertBox alert;
 
 	public EnterInfoTab(MenuTabPane p, Tab prev, String title, StudentList stData, boolean gIn){
-
+		list = new ListView<String>();
+		
 		goingIn = gIn;
 		parent = p;
 		previous = prev;
@@ -46,20 +47,9 @@ public class EnterInfoTab extends Tab {
 		imageHBox.setPadding(new Insets(15, 12, 15, 12));
 		imageHBox.setSpacing(10);
 		
-		AnimatedAlertBox alert = new AnimatedAlertBox("The ID or Student name does not exist.");
-		alert.setOpacity(0);
+		alert = new AnimatedAlertBox("The ID or Student name does not exist.");
 		
-		FadeTransition ftIn = new FadeTransition(Duration.millis(750), alert);
-		ftIn.setFromValue(0);
-		ftIn.setToValue(1.0);
-		ftIn.setCycleCount(1);
-		PauseTransition pt = new PauseTransition(Duration.millis(4000));
-		FadeTransition ftOut = new FadeTransition(Duration.millis(750), alert);
-		ftOut.setFromValue(1.0);
-		ftOut.setToValue(0);
-		ftOut.setCycleCount(1);
-		
-		seqT = new SequentialTransition (ftIn, pt, ftOut);
+
 	    
 
 		Image photoID  = new Image("img/image.png");
@@ -74,7 +64,7 @@ public class EnterInfoTab extends Tab {
 		imageHBox.setPadding(new Insets(15, 12, 15, 12));
 		imageHBox.setSpacing(10);
 
-		Label studentIDLabel = new Label("Enter Student Name, ID, or scan you student card below: ");
+		Label studentIDLabel = new Label("Enter Student Name, ID, or scan your student card below: ");
 		Button submitButton = new Button("Submit");
 		submitButton.setPrefSize(100, 20);
 		submitButton.setOnAction(e -> submitButton());
@@ -194,7 +184,13 @@ public class EnterInfoTab extends Tab {
 			moveOn();
 		}
 		else{
-			displayError();
+			if (submittedText.trim().isEmpty() ){
+				alert.play("Please submit your name, submit your ID, or scan your Student ID");
+			}
+			else{
+				alert.play("The student " + submittedText + " was not found.");
+			}
+			
 		}
 		
 	}
@@ -202,9 +198,6 @@ public class EnterInfoTab extends Tab {
 		System.out.println("Success!");
 	}
 	
-	private void displayError(){
-		seqT.play();
 
-	}
 
 }

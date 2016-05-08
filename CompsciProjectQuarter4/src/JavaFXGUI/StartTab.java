@@ -37,7 +37,7 @@ public class StartTab extends Tab {
 		buttonSignOut.setOnAction(e -> createEnterIdTab(false));
 		
 		Button viewButton = new Button("View Records");
-		viewButton.setPrefSize(100, 20);
+		viewButton.setPrefSize(150, 20);
 		
 		buttonHBox.getChildren().addAll(buttonSignIn, buttonSignOut);
 		viewButtonHBox.getChildren().add(viewButton);
