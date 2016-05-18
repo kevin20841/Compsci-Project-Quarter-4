@@ -1,12 +1,10 @@
 package JavaFXGUI;
-import java.awt.TextArea;
 import java.util.ArrayList;
 
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
 import javafx.event.*;
 @SuppressWarnings("restriction")
 public class OptionSelect extends VBox{
@@ -14,34 +12,26 @@ public class OptionSelect extends VBox{
 //TODO SELECTED CHECK MARK
 	private ArrayList<String> title = new ArrayList<String>();
 	private VBox buttonVBox;
-	private String option;
+	private ArrayList<String> option;
 	private int page;
 	private Label titleLabel;
 	private int height, width;
 	private HBox textFieldOtherHBox;
 	private TextField textFieldOther;
-	public OptionSelect(int w, int h, String t){
+	private HBox bottomHBox;
+	private Label pageNumberLabel;
+	public OptionSelect(int w, int h, EnterInfoTab close){
 		buttonList = new ArrayList<ArrayList<OptionButton>>();
-		buttonList.add(new ArrayList<OptionButton>());
 		height = h;
 		width = w;
-		
-		title.add(t);
 		init();
 	}
 
-	public OptionSelect(int h, int w, ArrayList<OptionButton> optionList, String t){
-		buttonList = new ArrayList<ArrayList<OptionButton>>();
-		buttonList.add(optionList);
-		title.add(t);
-		init();
-		height = h;
-		width = w;
-		updateState(0);
-		
-	}
+
 	
 	public void init(){
+		
+		option = new ArrayList<String>();
 		setMaxHeight(height);
 		setMaxWidth(width);
 		
@@ -50,17 +40,19 @@ public class OptionSelect extends VBox{
 		
 		Label textFieldOtherLabel = new Label("Other: ");
 		textFieldOther = new TextField();
-		Button textFieldOtherButton = new Button("Submit");
+		textFieldOther.setPrefWidth(width-300);
 		
+		Button textFieldOtherButton = new Button("Set");
 		textFieldOtherButton.setOnAction(new OtherHandler());
 		textFieldOtherButton.getStyleClass().add("textFieldOtherButton");
 		
+		
 		textFieldOtherHBox.getChildren().addAll(textFieldOtherLabel, textFieldOther, textFieldOtherButton);
-
+		textFieldOtherHBox.setSpacing(10);
 		
 		textFieldOtherHBox.getStyleClass().add("optionTextFieldOther");
 		
-		titleLabel= new Label(title.get(0));
+		titleLabel= new Label();
 		titleLabel.getStyleClass().add("optionTitle");
 		
 		
@@ -81,6 +73,13 @@ public class OptionSelect extends VBox{
 
 		contentHBox.getChildren().addAll(buttonVBox, pageButtonRight);
 		getChildren().add(contentHBox);
+		
+		bottomHBox = new HBox();
+		pageNumberLabel = new Label();
+		
+		bottomHBox.getChildren().add(pageNumberLabel);
+		bottomHBox.getStyleClass().add("bottomHBox");
+		getChildren().add(bottomHBox);
 	}
 	
 	public void addButton(int page, String name, String mes){
@@ -95,7 +94,7 @@ public class OptionSelect extends VBox{
 	public void addPage(String t){
 		buttonList.add(new ArrayList<OptionButton>());
 		title.add(t);
-		
+		option.add("");
 		updateState(0);
 	}
 	
@@ -110,10 +109,7 @@ public class OptionSelect extends VBox{
 		titleLabel.setText(title.get(pg));
 		page = pg;
 		buttonVBox.getChildren().clear();
-		double buttonHeight = 50;
-		if(buttonList.get(page).size() != 0){
-			buttonHeight = (double)(height-50)/ (buttonList.get(page).size()+1);
-		}
+		double buttonHeight = (double)(height-80)/ (buttonList.get(page).size()+1);
 		double buttonWidth = (double)(width-100);
 		
 		if (buttonList.get(page).size() >=3){
@@ -163,38 +159,38 @@ public class OptionSelect extends VBox{
 		
 		textFieldOtherHBox.setPrefHeight(buttonHeight);
 		textFieldOtherHBox.setPrefWidth(buttonWidth);
+
+		pageNumberLabel.setText(page + 1+ " / " + buttonList.size());
 		buttonVBox.getChildren().add(textFieldOtherHBox);
-		
-		
+
 		
 		
 	}
 	private class ButtonHandler implements EventHandler<ActionEvent> {
-		private String option ;
+		private String val ;
 		public ButtonHandler(String opt) {
-			this.option = opt ;
+			this.val = opt ;
 		}
 		@Override
 		public void handle(ActionEvent event) {
-			addInfo(option);
+			addInfo(val);
 		}
 
 	}
 	private void addInfo(String mes){
-		option = mes;
-		System.out.println(mes);
+		String temp = mes;
+		option.set(page, temp);
 	}
 	
 	private void setPage(boolean next){
 		if (next == true && (page + 1 < buttonList.size())){
 			transitionPage(page+1);
 		}
-		else if (next != true && (page-1 >= 0)){
+		else if ((next != true) && (page + 1>= 0)){
 			transitionPage(page-1);
 		}
-		else{
-			System.out.println("fail");
-			System.out.println(next);
+		else if ((next == true) && (page + 1 == buttonList.size())){
+			submit();
 		}
 	}
 	
@@ -228,7 +224,6 @@ public class OptionSelect extends VBox{
 		}
 
 	}
-	
 	private class OtherHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -236,5 +231,13 @@ public class OptionSelect extends VBox{
 		}
 
 	}
+	private void submit(){
+		for(String i : option){
+			System.out.println(i);
+		}
+
+		
+	}
+	
 	
 }
