@@ -14,14 +14,14 @@ import java.util.Map;
 public class StudentList {
 
 	private Map <String, Student> nameMap;
-	private Map <Integer, Student> studentIDMap;
+	private Map <String, Student> studentIDMap;
 	
 	
 	/**
 	 * No args- constructor. Creates empty StudentList
 	 */
 	public StudentList(){
-		studentIDMap = new HashMap <Integer, Student>();
+		studentIDMap = new HashMap <String, Student>();
 		nameMap = new HashMap <String, Student>();
 	}
 	/**
@@ -39,7 +39,7 @@ public class StudentList {
 	 * @param	sID		The Student ID to be searched.
 	 * @return	Returns the Student with that studentID
 	 */
-	public Student getStudent(int sID){
+	public Student getStudentByID(String sID){
 		return new Student(studentIDMap.get(sID));
 	}
 	
@@ -48,10 +48,17 @@ public class StudentList {
 	 * @param 	name	The name to be searched.
 	 * @return	Returns the Student with that name.
 	 */
-	public Student getStudent(String name){
+	public Student getStudentByName(String name){
 		return new Student(nameMap.get(name));
 	}
-	
+	/**
+	 * Searches for Student in the StudentList by toString value.
+	 * @param 	name	The name to be searched.
+	 * @return	Returns the Student with that name.
+	 */
+	public Student getStudentByToString(String s){
+		return new Student(getStudentByID(s.split("\\s+")[0]));
+	}
 	/**
 	 * Gets list of names.
 	 * @return	Returns <code> ArrayList &lt;String&gt; </code> in lexigraphic order, all lowercase. 
@@ -62,6 +69,8 @@ public class StudentList {
 		// sort(res, 0, res.size());
 		return res;
 	}
+	
+
 	/**
 	 * Gets list of ID + name + grade. 
 	 * @return	Returns <code> ArrayList &lt;String&gt;	 </code>  in numerical order,
@@ -78,8 +87,8 @@ public class StudentList {
 	 * Gets ordered list of IDs. 
 	 * @return	Returns <code> ArrayList &lt;Integer&gt;	 </code>  in numerical order,
 	 */
-	public ArrayList<Integer> getIDList(){
-		ArrayList<Integer> res = new ArrayList<Integer>();
+	public ArrayList<String> getIDList(){
+		ArrayList<String> res = new ArrayList<String>();
 		res.addAll(studentIDMap.keySet());
 		// sort(res, 0, res.size());
 		return res;

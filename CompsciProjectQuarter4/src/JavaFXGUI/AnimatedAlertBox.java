@@ -26,7 +26,7 @@ public class AnimatedAlertBox extends HBox{
 		ftIn.setFromValue(0);
 		ftIn.setToValue(1.0);
 		ftIn.setCycleCount(1);
-		PauseTransition pt = new PauseTransition(Duration.millis(4000));
+		PauseTransition pt = new PauseTransition(Duration.millis(2000));
 		FadeTransition ftOut = new FadeTransition(Duration.millis(500), this);
 		ftOut.setFromValue(1.0);
 		ftOut.setToValue(0);

@@ -25,5 +25,15 @@
 			<type>1</type>
 			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/img/image.png</location>
 		</link>
+		<link>
+			<name>src/img/next-button-left.png</name>
+			<type>1</type>
+			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/img/next-button-left.png</location>
+		</link>
+		<link>
+			<name>src/img/next-button-right.png</name>
+			<type>1</type>
+			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/img/next-button-right.png</location>
+		</link>
 	</linkedResources>
 </projectDescription>

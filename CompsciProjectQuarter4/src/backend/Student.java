@@ -1,13 +1,13 @@
 package backend;
 /** 
- * Data class that holds information on each student. Holds name, studentID and grade. Is comparable, compares by studentID.
+ * Data class that holds information on each student. Holds name, studentID and grade.
  * @author	Kevin
  */
-public class Student implements Comparable{
+public class Student{
 	
 	private String name;
 	private int grade;
-	private int studentID;
+	private String studentID;
 	private String arrivalReason;
 	private String arrivalNote;
 	private String earlyDepartureReason;
@@ -20,7 +20,7 @@ public class Student implements Comparable{
 	 * @param sID	ID of student.
 	 */
 	
-	public Student(String n, int g, int sID){
+	public Student(String n, int g, String sID){
 		name = n;
 		grade = (Integer) g;
 		studentID = sID;
@@ -38,9 +38,6 @@ public class Student implements Comparable{
 	/**
 	 * compareTo. Compares by size of studentID.
 	 */
-	public int compareTo(Object o) {
-		return ((Student) o).getStudentID() - studentID;
-	}
 	
 	/**
 	 * Gets name of student
@@ -60,7 +57,7 @@ public class Student implements Comparable{
 	 * Gets studentID of student
 	 * @return studentID of student.
 	 */
-	public int getStudentID() {
+	public String getStudentID() {
 		return studentID;
 	}
 	/**
@@ -98,7 +95,7 @@ public class Student implements Comparable{
 	}
 
 	public String toString(){
-		return  String.format("%-15d", studentID) + String.format("%-25s", name) +grade;
+		return  String.format("%-15s", studentID) + String.format("%-25s", name) +grade;
 	}
 	
 

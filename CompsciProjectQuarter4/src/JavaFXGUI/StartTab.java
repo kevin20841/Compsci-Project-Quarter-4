@@ -1,18 +1,33 @@
 package JavaFXGUI;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
 import backend.Student;
 import backend.StudentList;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.*;
 
 @SuppressWarnings("restriction")
 public class StartTab extends Tab {
+	
 	private MenuTabPane parent;
-	private StudentList studentData =  readStudentDatabase();
+	private HashMap<String, StudentList> data = new HashMap<String, StudentList>();
+	
 	public StartTab(MenuTabPane p, String title){
+		StudentList studentData =  readStudentDatabase();
+		StudentList studentOut = new StudentList();
+		StudentList studentIn = new StudentList();
+		
+		data.put("database", studentData);
+		data.put("out", studentOut);
+		data.put("in", studentIn);
+		
 		parent = p;
 		setText(title);
 		BorderPane content = new BorderPane();
@@ -29,12 +44,12 @@ public class StartTab extends Tab {
 		
 		Button buttonSignIn = new Button("Sign In");
 		buttonSignIn.setPrefSize(200, 40);
-		buttonSignIn.setOnAction(e -> createEnterIdTab(true));
+		buttonSignIn.setOnAction(e -> moveOn(true));
 
 		
 		Button buttonSignOut = new Button("Sign Out");
 		buttonSignOut.setPrefSize(200, 40);
-		buttonSignOut.setOnAction(e -> createEnterIdTab(false));
+		buttonSignOut.setOnAction(e -> moveOn(false));
 		
 		Button viewButton = new Button("View Records");
 		viewButton.setPrefSize(150, 20);
@@ -48,21 +63,73 @@ public class StartTab extends Tab {
 		
 	}
 	
-	private void createEnterIdTab(boolean signIn){
-		EnterInfoTab tab2 = new EnterInfoTab(parent, this, "Enter ID",  studentData, signIn);
+	private void moveOn(boolean signIn){
+		EnterStudentTab tab2 = new EnterStudentTab(parent, this, "Enter ID",  data, signIn);
 		setDisable(true);
 		parent.getTabs().add(tab2);
 		parent.getSelectionModel().select(tab2);
 		
 	}
-	//TODO Implement importing database
 	private StudentList readStudentDatabase(){
 		StudentList stData = new StudentList();
 	
-		for (int i = 0; i < 12000; i++){
-			stData.add(new Student("test" + i, i % 10 ,i));
+		for (int i = 0; i < 1200; i++){
+
+			
+			stData.add(new Student("test" + i, i % 10 , "" + i));
 		}
 		return stData;
 	}
+	
+	@SuppressWarnings("resource")
+	public StudentList readStudentDatabase(String fileName){
+		StudentList list = new StudentList();
+		Scanner file = null;
+		try {
+			file = new Scanner(new File(fileName));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		//create Map of Fields (line 1)
+		Map<String, Integer> field = new HashMap<String,Integer>();
+		int i = 0;
+		for(String fieldName: file.nextLine().split(",")){
+			field.put(fieldName.trim(), i++);
+		}
+		
+		//Load in student data
+		ArrayList<ArrayList<String>> studentData = new ArrayList<ArrayList<String>>();
+		while(file.hasNext()){
+			ArrayList<String> aStudent = new ArrayList<String>();
+			for(String studentField: file.nextLine().split("\",\"")){
+				aStudent.add(studentField.trim());
+			}
+			studentData.add(aStudent);
+		}
+			
+		//eliminate duplicates
+		for(i = 0; i < studentData.size();  i++){
+			String id = studentData.get(i).get(field.get("ID"));
+			for(int j = studentData.size() - 1; j > i; j--){
+				String id2 = studentData.get(j).get(field.get("ID"));
+				if(id.equals(id2)){
+					studentData.remove(j);
+				}
+			}	
+		}
+		
+		for(ArrayList<String> student: studentData){
+			String id = (student.get(field.get("ID")));
+			String name = student.get(field.get("FIRST"))+" "+student.get(field.get("LAST"));
+			int grade = Integer.parseInt(student.get(field.get("GR")));
+			list.add(new Student (name,grade,id));
+			System.out.println(name+" "+id+" "+grade);
+		
+		} 
+		return list;
+		
+	}
+
+	
 
 }
