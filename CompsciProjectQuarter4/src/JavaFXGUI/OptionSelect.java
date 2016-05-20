@@ -20,20 +20,23 @@ public class OptionSelect extends VBox{
 	private TextField textFieldOther;
 	private HBox bottomHBox;
 	private Label pageNumberLabel;
+	private Button submitButton;
+	
 	public OptionSelect(int w, int h, EnterInfoTab close){
 		buttonList = new ArrayList<ArrayList<OptionButton>>();
 		height = h;
 		width = w;
 		init();
 	}
-
-
 	
 	public void init(){
 		
 		option = new ArrayList<String>();
 		setMaxHeight(height);
 		setMaxWidth(width);
+		
+		submitButton = new Button("Submit");
+		submitButton.getStyleClass().add("submitButton");
 		
 		
 		textFieldOtherHBox  = new HBox();
@@ -70,6 +73,8 @@ public class OptionSelect extends VBox{
 		
 		contentHBox.getChildren().add(pageButtonLeft);
 		buttonVBox = new VBox();
+		buttonVBox.getStyleClass().add("buttonVBox");
+		
 
 		contentHBox.getChildren().addAll(buttonVBox, pageButtonRight);
 		getChildren().add(contentHBox);
@@ -80,6 +85,8 @@ public class OptionSelect extends VBox{
 		bottomHBox.getChildren().add(pageNumberLabel);
 		bottomHBox.getStyleClass().add("bottomHBox");
 		getChildren().add(bottomHBox);
+		
+		
 	}
 	
 	public void addButton(int page, String name, String mes){
@@ -160,12 +167,13 @@ public class OptionSelect extends VBox{
 		textFieldOtherHBox.setPrefHeight(buttonHeight);
 		textFieldOtherHBox.setPrefWidth(buttonWidth);
 
-		pageNumberLabel.setText(page + 1+ " / " + buttonList.size());
+		pageNumberLabel.setText(page + 1+ " / " + (buttonList.size() + 1));
 		buttonVBox.getChildren().add(textFieldOtherHBox);
-
 		
+		textFieldOther.clear();
 		
 	}
+	
 	private class ButtonHandler implements EventHandler<ActionEvent> {
 		private String val ;
 		public ButtonHandler(String opt) {
@@ -186,13 +194,14 @@ public class OptionSelect extends VBox{
 		if (next == true && (page + 1 < buttonList.size())){
 			transitionPage(page+1);
 		}
-		else if ((next != true) && (page + 1>= 0)){
+		else if ((next != true) && (page - 1>= 0)){
 			transitionPage(page-1);
 		}
 		else if ((next == true) && (page + 1 == buttonList.size())){
-			submit();
+			transitionPage(page+1);
 		}
 	}
+	
 	
 	private void transitionPage(int pg){
 		FadeTransition ftIn = new FadeTransition(Duration.millis(250), buttonVBox);
@@ -206,10 +215,24 @@ public class OptionSelect extends VBox{
 		ftOut.setToValue(0);
 		ftOut.setCycleCount(1);
 		
+		if (pg == buttonList.size()){
+			ftOut.play();
+			buttonVBox.getChildren().clear();
+			titleLabel.setText("Please submit your responses:");
+			buttonVBox.getChildren().add(submitButton);
+			buttonVBox.setPrefHeight(height -90);
+			buttonVBox.setPrefWidth(width - 100);
+			pageNumberLabel.setText(pg + 1 +" / " + (buttonList.size() + 1));
+			ftIn.play();
+		}
+		else{
+			ftOut.play();
+			updateState(pg);
+			ftIn.play();
+		}
 
-		ftOut.play();
-		updateState(pg);
-		ftIn.play();
+		
+		
 
 	}
 	
@@ -231,13 +254,7 @@ public class OptionSelect extends VBox{
 		}
 
 	}
-	private void submit(){
-		for(String i : option){
-			System.out.println(i);
-		}
 
-		
-	}
 	
 	
 }

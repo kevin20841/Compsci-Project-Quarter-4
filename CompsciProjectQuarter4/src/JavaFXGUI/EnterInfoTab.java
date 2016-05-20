@@ -23,20 +23,26 @@ public class EnterInfoTab extends Tab{
 		parent = par;
 	
 
-		OptionSelect test = new OptionSelect(700, 500, this);
-		test.addPage("TestPage2");
-		test.addPage("TestPage3");
+		OptionSelect infoOptionSelect = new OptionSelect(700, 500, this);
+		
+		
+		// CHANGE FROM HERE:
+		
+		infoOptionSelect.addPage("TestPage2");
+		infoOptionSelect.addPage("TestPage3");
 		for (int i = 0; i < 5; i ++){
-			test.addButton(0, "TEXT" + i, "" + i);
+			infoOptionSelect.addButton(0, "TEXT" + i, "" + i);
 			
 		}
 		for (int i = 4; i < 10; i ++){
-			test.addButton(1, "TEXT" + i, "" + i);
-			
+			infoOptionSelect.addButton(1, "TEXT" + i, "" + i);
 		}
-		test.addButton(1, "TEXT", "hi");
-		test.addButton(1, "TEXT1", "hi1");
-		test.setAlignment(Pos.CENTER);
+		infoOptionSelect.addButton(1, "TEXT", "hi");
+		infoOptionSelect.addButton(1, "TEXT1", "hi1");
+		
+		
+		// TO HERE: 
+		infoOptionSelect.setAlignment(Pos.CENTER);
 		BorderPane content = new BorderPane();
 		
 		Button backButton = new Button("Back");
@@ -50,7 +56,7 @@ public class EnterInfoTab extends Tab{
 		navHBox.getChildren().add(backButton);
 		
 		
-		content.setCenter(test);
+		content.setCenter(infoOptionSelect);
 		content.setBottom(navHBox);
 		setContent(content);
 	}

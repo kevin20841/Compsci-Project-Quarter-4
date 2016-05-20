@@ -222,10 +222,28 @@
   -fx-min-height: 10;
 }
 
+.submitButton{
+  -fx-font-size: 10pt;
+  -fx-background-color: #5cb85c;
+  -fx-border-color: #4cae4c;
+
+}
+.submitButton:hover {
+  -fx-color: #fff;
+  -fx-background-color: #449d44;
+  -fx-border-color: #398439;
+}
+
+.submitButton:armed{
+  -fx-color: #fff;
+  -fx-background-color: #5cb85c !important;
+  -fx-border-color: #4cae4c !important;
+}
+
 
 .bottomHBox{
-  -fx-max-height: 30;
-  -fx-pref-height:30;
+  -fx-max-height: 40;
+  -fx-pref-height: 40;
   -fx-max-width: 10000;
   -fx-border-color: #ccc #ccc #337ab7 #ccc;
   -fx-text-fill: black;
@@ -234,6 +252,11 @@
   -fx-background-radius: 0 0 0 0;
   -fx-alignment: center;
 }
+
+.buttonVBox {
+	-fx-alignment: center;
+}
+
 .tab{
 	-fx-background-color: #FFF;
 	-fx-border-color: #eeeeee;
