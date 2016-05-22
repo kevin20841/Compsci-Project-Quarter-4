@@ -1,4 +1,6 @@
-1, 0
++++
+++
+What is your reason for late arrival?
 Sick
 Doctor/Dentist Appointment
 Unexcused
@@ -6,15 +8,26 @@ Late Bus
 Religious Reason
 Transportation
 College Visit
-1, 1
-Note in the basket
-Note will be emailed
-Note will be in the basket within the next 3 days
-2, 0
-Health Room Excused - put note in basket
-Sick-Parent Note to excuse
+++
+Where is your note?
+Currently in the basket
+Emailed
+In the basket within the next 3 days
++++
+++
+What is your reason for leaving?
+Sick
 Doctor/Dentist Appointment
 Religious Reason
 College Visit
+++
+Who were you excused by?
+Health Room
+Parent
+++
+Where is your note?
+Currently in the basket
+Emailed
+In the basket within the next 3 days
 
 

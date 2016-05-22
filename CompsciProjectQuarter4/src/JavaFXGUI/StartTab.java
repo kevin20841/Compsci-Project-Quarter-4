@@ -18,15 +18,18 @@ public class StartTab extends Tab {
 	
 	private MenuTabPane parent;
 	private HashMap<String, StudentList> data = new HashMap<String, StudentList>();
+	private AnimatedAlertBox alert;
 	
 	public StartTab(MenuTabPane p, String title){
 		StudentList studentData =  readStudentDatabase();
 		StudentList studentOut = new StudentList();
 		StudentList studentIn = new StudentList();
+		StudentList studentOutIn = new StudentList();
 		
 		data.put("database", studentData);
 		data.put("out", studentOut);
 		data.put("in", studentIn);
+		data.put("outin", studentOutIn);
 		
 		parent = p;
 		setText(title);
@@ -57,6 +60,10 @@ public class StartTab extends Tab {
 		buttonHBox.getChildren().addAll(buttonSignIn, buttonSignOut);
 		viewButtonHBox.getChildren().add(viewButton);
 		
+		alert = new AnimatedAlertBox("Submission Sucessful!", false);
+		
+		content.setTop(alert);
+		
 		content.setCenter(buttonHBox);
 		content.setBottom(viewButtonHBox);
 		setContent(content);
@@ -64,6 +71,7 @@ public class StartTab extends Tab {
 	}
 	
 	private void moveOn(boolean signIn){
+		
 		EnterStudentTab tab2 = new EnterStudentTab(parent, this, "Enter ID",  data, signIn);
 		setDisable(true);
 		parent.getTabs().add(tab2);
@@ -129,7 +137,12 @@ public class StartTab extends Tab {
 		return list;
 		
 	}
-
+	public void displaySucess(){
+		alert.play();
+	}
+	
+	
+	
 	
 
 }

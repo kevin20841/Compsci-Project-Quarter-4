@@ -12,11 +12,19 @@ import javafx.scene.layout.*;
 public class AnimatedAlertBox extends HBox{
 	private SequentialTransition  seqT; 
 	private Label studentIDLabel;
-	public AnimatedAlertBox(String defText){
+	public AnimatedAlertBox(String defText, boolean warning){
 		setOpacity(0);
-		getStyleClass().add("alertError");
 		studentIDLabel = new Label(defText);
-		studentIDLabel.getStyleClass().add("alertText");
+		if (warning){
+			getStyleClass().add("alertMessage");
+			studentIDLabel.getStyleClass().add("alertText");
+		}
+		else{
+			getStyleClass().add("sucessMessage");
+			studentIDLabel.getStyleClass().add("sucessText");
+		}
+		
+		
 		getChildren().add(studentIDLabel);
 		setAlignment(Pos.CENTER);
 		setPrefHeight(40);
@@ -35,8 +43,8 @@ public class AnimatedAlertBox extends HBox{
 		seqT = new SequentialTransition (ftIn, pt, ftOut);
 	}
 	
-	public void play(String err){
-		studentIDLabel.setText(err);
+	public void play(String mes){
+		studentIDLabel.setText(mes);
 		seqT.play();
 	}
 	public void play(){

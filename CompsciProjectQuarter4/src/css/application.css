@@ -8,17 +8,28 @@
 	-fx-font-family: "Avenir";
 }
 
-.alertError{
+.alertMessage{
 	-fx-background-color: #b94a48;
 	-fx-border-color: #b94a48;
 	-fx-padding: 8px 35px 8px 14px;
 	-fx-margin-bottom: 18px;
+	-fx-pref-height: 40px;
 }
 
 .alertText{
 	-fx-text-fill: #f2dede;
 }
+.sucessMessage{
+	-fx-background-color: #5cb85c;
+	-fx-border-color: #5cb85c;
+	-fx-padding: 8px 35px 8px 14px;
+	-fx-margin-bottom: 18px;
+	-fx-pref-height: 40px;
+}
 
+.sucessText{
+	-fx-text-fill: #fff;
+}
 .button {
   -fx-border-radius: 4px;
   -fx-background-radius: 4px;
@@ -138,7 +149,6 @@
   -fx-border-color: #ccc;
   -fx-text-fill: black;
   -fx-border-width: 0 0 0.5 0;
-  -fx-alignment: center;
 }
 .optionButton-mid {
 
@@ -150,7 +160,6 @@
   -fx-border-color: #ccc;
   -fx-text-fill: black;
   -fx-border-width: 0.5 0 0.5 0;
-  -fx-alignment: center;
 }
 
 .optionButton-bottom{
@@ -161,7 +170,6 @@
   -fx-border-width: 0.5 0 0 0;
   -fx-border-radius: 0 0 0 0;
   -fx-background-radius: 0 0 0 0;
-  -fx-alignment: center;
 
 }
 
@@ -195,7 +203,6 @@
   -fx-border-width: 0.5 0 0 0;
   -fx-border-radius: 0 0 0 0;
   -fx-background-radius: 0 0 0 0;
-  -fx-alignment: center;
   -fx-padding: 0;
 
 }

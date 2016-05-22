@@ -1,6 +1,9 @@
 package JavaFXGUI;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import backend.Student;
 import backend.StudentList;
@@ -12,38 +15,73 @@ public class EnterInfoTab extends Tab{
 	
 	private boolean goingIn;
 	private MenuTabPane parent;
-	private Tab previous;
+	private EnterStudentTab previous;
+	private Student student;
+	private HashMap<String, StudentList> data;
+	private AnimatedAlertBox alert;
 	
-	public EnterInfoTab(MenuTabPane par, Tab prev, String title,
-			HashMap<String, StudentList> data, boolean gIn, Student student){
-		
+	public EnterInfoTab(MenuTabPane par, EnterStudentTab prev, String title,
+			HashMap<String, StudentList> d, boolean gIn, Student st){
 		setText(title);
-		
+		goingIn = gIn;
 		previous = prev;
 		parent = par;
-	
+		student = st;
 
 		OptionSelect infoOptionSelect = new OptionSelect(700, 500, this);
+		data = d;
+		
+		BorderPane content = new BorderPane();
+		
+		alert = new AnimatedAlertBox("Please select all options.", true);
+		content.setTop(alert);
+		int version = 0;
+		if (goingIn){
+			version = 0;
+		}
+		else{
+			if (data.get("out").contains(student)){
+				version = 2;
+			}
+			else{
+				version = 1;
+			}
+		}
+
+
+		Scanner file = null;
+		try {
+			file = new Scanner(new File("src/data/options.sip"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
-		// CHANGE FROM HERE:
-		
-		infoOptionSelect.addPage("TestPage2");
-		infoOptionSelect.addPage("TestPage3");
-		for (int i = 0; i < 5; i ++){
-			infoOptionSelect.addButton(0, "TEXT" + i, "" + i);
+		int v = -1;
+		int page = -1; 
+		String stringData = "";
+		while(file.hasNext()){
 			
+			stringData= file.nextLine();
+			if (stringData.equals("+++")){
+				v ++;
+			}
+			else if (stringData.equals("++") && version == v){
+				page++;
+				stringData = file.nextLine();
+				infoOptionSelect.addPage(stringData);
+			}
+			else if (version == v){
+				infoOptionSelect.addButton(page, stringData, stringData);
+			}
 		}
-		for (int i = 4; i < 10; i ++){
-			infoOptionSelect.addButton(1, "TEXT" + i, "" + i);
-		}
-		infoOptionSelect.addButton(1, "TEXT", "hi");
-		infoOptionSelect.addButton(1, "TEXT1", "hi1");
+		file.close();
 		
 		
 		// TO HERE: 
 		infoOptionSelect.setAlignment(Pos.CENTER);
-		BorderPane content = new BorderPane();
+
 		
 		Button backButton = new Button("Back");
 		backButton.setOnAction(e -> goBack());
@@ -73,5 +111,32 @@ public class EnterInfoTab extends Tab{
 	public ArrayList<String> readOptionList(){
 		
 		return null;
+	}
+	public void addData(ArrayList<String> option){
+		if (option.get(0).isEmpty() || option.get(1).isEmpty()){
+			alert.play();
+		}
+		else{
+			student.setReason(option.get(0));
+			student.setNote(option.get(1));
+
+
+			if (goingIn){
+				if (data.get("out").contains(student)){
+					data.get("outin").add(student);
+				}
+				else{
+					data.get("in").add(student);
+				}
+			}
+			else{
+				data.get("out").add(student);
+			}
+
+			goBack();
+			previous.goBack(true);
+		}
+		
+		
 	}
 }

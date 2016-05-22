@@ -97,37 +97,14 @@ public class StudentList {
 		return (ArrayList<Student>) nameMap.values();
 		
 	}
-	/**
-	 * Generic quicksort. 
-	 * @param	data	ArrayList of Comparable objects
-	 * @param 	a		Started pointer in quicksort
-	 * @param	b		End pointer in quicksort
-	 */
-	private <T extends Comparable<T>> void sort(ArrayList<T> data, int a, int b) {
-        if (a < b) {
-            int i = a, j = b;
-            T x = data.get((i + j) / 2);
-
-            do {
-                while (data.get(i).compareTo(x) < 0) {
-                	i++;
-                }
-                while (x.compareTo(data.get(j)) < 0) {
-                	j--;
-                }
-
-                if ( i <= j) {
-                	T tmp = data.get(i);
-                	data.set(i, data.get(j));
-                	data.set(j,tmp);
-                    i++;
-                    j--;
-                }
-
-            } while (i <= j);
-
-            sort(data, a, j);
-            sort(data, i, b);
-        }
-    }
+	
+	public boolean contains(Student other){
+		if (nameMap.values().contains(other)){
+			return true;
+		}
+		return false;
+	}
+	public int size(){
+		return nameMap.values().size();
+	}
 }

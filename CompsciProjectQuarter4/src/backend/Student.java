@@ -3,16 +3,14 @@ package backend;
  * Data class that holds information on each student. Holds name, studentID and grade.
  * @author	Kevin
  */
-public class Student{
+public class Student implements Comparable<Student>{
 	
 	private String name;
 	private int grade;
 	private String studentID;
-	private String arrivalReason;
-	private String arrivalNote;
-	private String earlyDepartureReason;
-	private String EarlyDepartureNote;
-	
+	private String reason;
+	private String note;
+
 	/**
 	 *  Constructor. name is lower case so that compareTo for strings arranges by alphabetical order. studentID is Integer wrapper class for same reason.
 	 * @param n		Name of student.
@@ -26,6 +24,8 @@ public class Student{
 		studentID = sID;
 	}
 	
+
+
 	/**
 	 * Copy Constructor
 	 * @param other	Student to be copied.
@@ -64,40 +64,45 @@ public class Student{
 	 * Gets Arrival reason of student
 	 * @return Arrival reason of student.
 	 */
-	public String getArrivalReason() {
-		return arrivalReason;
-	}
-	
-	/**
-	 * Gets arrival note location of student
-	 * @return Arrival note location of student.
-	 */
-
-	public String getArrivalNote() {
-		return arrivalNote;
-	}
-
-	/**
-	 * Gets Reason for early departure of student
-	 * @return Gets reason for early departure of student.
-	 */
-	
-	public String getEarlyDepartureReason() {
-		return earlyDepartureReason;
-	}
-	
-	/**
-	 * Gets early departure note location of student
-	 * @return Early departure note location of student.
-	 */
-	public String getEarlyDepartureNote() {
-		return EarlyDepartureNote;
-	}
 
 	public String toString(){
 		return  String.format("%-15s", studentID) + String.format("%-25s", name) +grade;
 	}
+
+
+
+	public String getReason() {
+		return reason;
+	}
+
+
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+
+
+	public String getNote() {
+		return note;
+	}
+
+
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+
+
+
+
+	@Override
+	public int compareTo(Student o) {
+		return toString().compareTo(o.toString());
+	}
 	
+
 
 	
 	

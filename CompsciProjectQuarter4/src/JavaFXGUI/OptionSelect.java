@@ -16,17 +16,18 @@ public class OptionSelect extends VBox{
 	private int page;
 	private Label titleLabel;
 	private int height, width;
-	private HBox textFieldOtherHBox;
-	private TextField textFieldOther;
+	public OptionHBox textFieldOtherHBox;
 	private HBox bottomHBox;
 	private Label pageNumberLabel;
 	private Button submitButton;
+	private EnterInfoTab tabToBeClosed;
 	
 	public OptionSelect(int w, int h, EnterInfoTab close){
 		buttonList = new ArrayList<ArrayList<OptionButton>>();
 		height = h;
 		width = w;
 		init();
+		tabToBeClosed = close;
 	}
 	
 	public void init(){
@@ -37,21 +38,11 @@ public class OptionSelect extends VBox{
 		
 		submitButton = new Button("Submit");
 		submitButton.getStyleClass().add("submitButton");
+		submitButton.setOnAction(new submitHandler());
 		
 		
-		textFieldOtherHBox  = new HBox();
+		 textFieldOtherHBox  = new OptionHBox(width, this);
 		
-		Label textFieldOtherLabel = new Label("Other: ");
-		textFieldOther = new TextField();
-		textFieldOther.setPrefWidth(width-300);
-		
-		Button textFieldOtherButton = new Button("Set");
-		textFieldOtherButton.setOnAction(new OtherHandler());
-		textFieldOtherButton.getStyleClass().add("textFieldOtherButton");
-		
-		
-		textFieldOtherHBox.getChildren().addAll(textFieldOtherLabel, textFieldOther, textFieldOtherButton);
-		textFieldOtherHBox.setSpacing(10);
 		
 		textFieldOtherHBox.getStyleClass().add("optionTextFieldOther");
 		
@@ -121,7 +112,7 @@ public class OptionSelect extends VBox{
 		
 		if (buttonList.get(page).size() >=3){
 			buttonList.get(page).get(0).setPosStyle("top");
-			buttonList.get(page).get(0).setOnAction(new ButtonHandler(buttonList.get(page).get(0).getValue()));
+			buttonList.get(page).get(0).setOnAction(new ButtonHandler(buttonList.get(page).get(0).getValue(), buttonList.get(page).get(0),this));
 			buttonList.get(page).get(0).setPrefHeight(buttonHeight);
 			buttonList.get(page).get(0).setPrefWidth(buttonWidth);
 			buttonVBox.getChildren().add(buttonList.get(page).get(0));
@@ -132,23 +123,23 @@ public class OptionSelect extends VBox{
 				buttonList.get(page).get(i).setPrefHeight(buttonHeight);
 				buttonList.get(page).get(i).setPrefWidth(buttonWidth);
 				
-				buttonList.get(page).get(i).setOnAction(new ButtonHandler(buttonList.get(page).get(i).getValue()));
+				buttonList.get(page).get(i).setOnAction(new ButtonHandler(buttonList.get(page).get(i).getValue(), buttonList.get(page).get(i),this));
 			}
 			buttonList.get(page).get(buttonList.get(page).size()-1).setPosStyle("mid");
-			buttonList.get(page).get(buttonList.get(page).size()-1).setOnAction(new ButtonHandler(buttonList.get(page).get(buttonList.get(page).size()-1).getValue()));
+			buttonList.get(page).get(buttonList.get(page).size()-1).setOnAction(new ButtonHandler(buttonList.get(page).get(buttonList.get(page).size()-1).getValue(),buttonList.get(page).get(buttonList.get(page).size()-1), this));
 			buttonList.get(page).get(buttonList.get(page).size()-1).setPrefHeight(buttonHeight);
 			buttonList.get(page).get(buttonList.get(page).size()-1).setPrefWidth(buttonWidth);
 			buttonVBox.getChildren().add(buttonList.get(page).get(buttonList.get(page).size()-1));
 		}
 		else if (buttonList.get(page).size() == 2){
 			buttonList.get(page).get(0).setPosStyle("top");
-			buttonList.get(page).get(0).setOnAction(new ButtonHandler(buttonList.get(page).get(0).getValue()));
+			buttonList.get(page).get(0).setOnAction(new ButtonHandler(buttonList.get(page).get(0).getValue(), buttonList.get(page).get(0),this));
 			buttonList.get(page).get(0).setPrefHeight(buttonHeight);
 			buttonList.get(page).get(0).setPrefWidth(buttonWidth);
 			buttonVBox.getChildren().add(buttonList.get(page).get(0));
 			
 			buttonList.get(page).get(buttonList.get(page).size()-1).setPosStyle("mid");
-			buttonList.get(page).get(buttonList.get(page).size()-1).setOnAction(new ButtonHandler(buttonList.get(page).get(buttonList.get(page).size()-1).getValue()));
+			buttonList.get(page).get(buttonList.get(page).size()-1).setOnAction(new ButtonHandler(buttonList.get(page).get(buttonList.get(page).size()-1).getValue(), buttonList.get(page).get(buttonList.get(page).size()-1), this));
 			buttonList.get(page).get(buttonList.get(page).size()-1).setPrefHeight(buttonHeight);
 			buttonList.get(page).get(buttonList.get(page).size()-1).setPrefWidth(buttonWidth);
 			buttonVBox.getChildren().add(buttonList.get(page).get(buttonList.get(page).size()-1));
@@ -158,7 +149,7 @@ public class OptionSelect extends VBox{
 			buttonList.get(page).get(0).setPosStyle("mid");
 			buttonList.get(page).get(0).setPrefHeight(buttonHeight);
 			buttonList.get(page).get(0).setPrefWidth(buttonWidth);
-			buttonList.get(page).get(0).setOnAction(new ButtonHandler(buttonList.get(page).get(0).getValue()));
+			buttonList.get(page).get(0).setOnAction(new ButtonHandler(buttonList.get(page).get(0).getValue(), buttonList.get(page).get(0),this));
 			buttonVBox.getChildren().add(buttonList.get(page).get(0));
 		}
 		
@@ -170,31 +161,20 @@ public class OptionSelect extends VBox{
 		pageNumberLabel.setText(page + 1+ " / " + (buttonList.size() + 1));
 		buttonVBox.getChildren().add(textFieldOtherHBox);
 		
-		textFieldOther.clear();
+		textFieldOtherHBox.clear();
 		
 	}
 	
-	private class ButtonHandler implements EventHandler<ActionEvent> {
-		private String val ;
-		public ButtonHandler(String opt) {
-			this.val = opt ;
-		}
-		@Override
-		public void handle(ActionEvent event) {
-			addInfo(val);
-		}
 
-	}
-	private void addInfo(String mes){
-		String temp = mes;
-		option.set(page, temp);
+	public void addInfo(String mes){
+		option.set(page, mes);
 	}
 	
 	private void setPage(boolean next){
 		if (next == true && (page + 1 < buttonList.size())){
 			transitionPage(page+1);
 		}
-		else if ((next != true) && (page - 1>= 0)){
+		else if ((next != true) && (page - 1 >= 0)){
 			transitionPage(page-1);
 		}
 		else if ((next == true) && (page + 1 == buttonList.size())){
@@ -223,6 +203,7 @@ public class OptionSelect extends VBox{
 			buttonVBox.setPrefHeight(height -90);
 			buttonVBox.setPrefWidth(width - 100);
 			pageNumberLabel.setText(pg + 1 +" / " + (buttonList.size() + 1));
+			page = page + 1;
 			ftIn.play();
 		}
 		else{
@@ -247,14 +228,15 @@ public class OptionSelect extends VBox{
 		}
 
 	}
-	private class OtherHandler implements EventHandler<ActionEvent> {
+
+
+	private class submitHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			addInfo(textFieldOther.getText());
+			tabToBeClosed.addData(option);
 		}
 
 	}
-
 	
 	
 }

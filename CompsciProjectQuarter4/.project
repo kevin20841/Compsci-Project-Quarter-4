@@ -21,6 +21,16 @@
 			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/css/fextile.css</location>
 		</link>
 		<link>
+			<name>src/img/gifCheckmark.gif</name>
+			<type>1</type>
+			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/img/gifCheckmark.gif</location>
+		</link>
+		<link>
+			<name>src/img/gifCheckmarkReverse.gif</name>
+			<type>1</type>
+			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/img/gifCheckmarkReverse.gif</location>
+		</link>
+		<link>
 			<name>src/img/image.png</name>
 			<type>1</type>
 			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/img/image.png</location>

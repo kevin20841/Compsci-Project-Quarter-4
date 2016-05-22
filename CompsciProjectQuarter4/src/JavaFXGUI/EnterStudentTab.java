@@ -27,7 +27,7 @@ import javafx.util.Duration;
 public class EnterStudentTab extends Tab {
 	private boolean goingIn;
 	private MenuTabPane parent;
-	private Tab previous;
+	private StartTab previous;
 	private ObservableList<String> nameEntries;  
 	private ListView<String> list;
 	private StudentList studentData;
@@ -35,12 +35,13 @@ public class EnterStudentTab extends Tab {
 	private TextField searchTextField;
 	private AnimatedAlertBox alert;
 
-	public EnterStudentTab(MenuTabPane par, Tab prev, String title, HashMap<String, 
+	public EnterStudentTab(MenuTabPane par, StartTab prev, String title, HashMap<String, 
 			StudentList> d, boolean gIn){
 		
 		list = new ListView<String>();
 		
 		goingIn = gIn;
+		
 		parent = par;
 		previous = prev;
 		studentData = d.get("database");
@@ -54,7 +55,7 @@ public class EnterStudentTab extends Tab {
 		imageHBox.setPadding(new Insets(15, 12, 15, 12));
 		imageHBox.setSpacing(10);
 		
-		alert = new AnimatedAlertBox("The ID or Student name does not exist.");
+		alert = new AnimatedAlertBox("The ID or Student name does not exist.", true);
 		
 
 	    
@@ -84,7 +85,7 @@ public class EnterStudentTab extends Tab {
 		navHBox.setSpacing(10);
 
 		Button backButton = new Button("Back");
-		backButton.setOnAction(e -> goBack());
+		backButton.setOnAction(e -> goBack(false));
 		backButton.setPrefSize(150, 20);
 
 		navHBox.getChildren().add(backButton);
@@ -135,10 +136,13 @@ public class EnterStudentTab extends Tab {
 		setContent(content);
 	}
 
-	public void goBack(){
+	public void goBack(boolean sucess){
 		previous.setDisable(false);
 		parent.getSelectionModel().select(previous);
 		die();
+		if (sucess){
+			previous.displaySucess();
+		}
 	}
 	public void die(){
 		parent.getTabs().remove(this);
@@ -194,6 +198,7 @@ public class EnterStudentTab extends Tab {
 		
 	}
 	private void moveOn(boolean signIn, Student student){
+
 		EnterInfoTab tab3;
 		if (signIn){
 			 tab3= new EnterInfoTab(parent, this, "Sign In",  data, signIn, student);
