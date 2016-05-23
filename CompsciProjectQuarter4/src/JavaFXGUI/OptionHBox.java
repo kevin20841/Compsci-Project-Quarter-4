@@ -58,4 +58,5 @@ public class OptionHBox extends HBox implements Playable{
 	public String getText(){
 		return textFieldOther.getText();
 	}
+	
 }

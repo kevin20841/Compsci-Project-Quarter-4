@@ -16,8 +16,8 @@ public class OptionSelect extends VBox{
 	private int page;
 	private Label titleLabel;
 	private int height, width;
-	public OptionHBox textFieldOtherHBox;
 	private HBox bottomHBox;
+	public OptionHBox textFieldOtherHBox;
 	private Label pageNumberLabel;
 	private Button submitButton;
 	private EnterInfoTab tabToBeClosed;
@@ -41,10 +41,7 @@ public class OptionSelect extends VBox{
 		submitButton.setOnAction(new submitHandler());
 		
 		
-		 textFieldOtherHBox  = new OptionHBox(width, this);
-		
-		
-		textFieldOtherHBox.getStyleClass().add("optionTextFieldOther");
+
 		
 		titleLabel= new Label();
 		titleLabel.getStyleClass().add("optionTitle");
@@ -153,15 +150,17 @@ public class OptionSelect extends VBox{
 			buttonVBox.getChildren().add(buttonList.get(page).get(0));
 		}
 		
-
+		textFieldOtherHBox  = new OptionHBox(width, this);
+			
+			
+		textFieldOtherHBox.getStyleClass().add("optionTextFieldOther");
 		
 		textFieldOtherHBox.setPrefHeight(buttonHeight);
 		textFieldOtherHBox.setPrefWidth(buttonWidth);
 
 		pageNumberLabel.setText(page + 1+ " / " + (buttonList.size() + 1));
 		buttonVBox.getChildren().add(textFieldOtherHBox);
-		
-		textFieldOtherHBox.clear();
+
 		
 	}
 	

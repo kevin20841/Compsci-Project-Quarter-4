@@ -1,4 +1,10 @@
 package backend;
+
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+
 /** 
  * Data class that holds information on each student. Holds name, studentID and grade.
  * @author	Kevin
@@ -10,6 +16,11 @@ public class Student implements Comparable<Student>{
 	private String studentID;
 	private String reason;
 	private String note;
+	private String date;
+	private String time;
+	private String excused = "";
+	private String arrTime = "None";
+	
 
 	/**
 	 *  Constructor. name is lower case so that compareTo for strings arranges by alphabetical order. studentID is Integer wrapper class for same reason.
@@ -22,6 +33,13 @@ public class Student implements Comparable<Student>{
 		name = n;
 		grade = (Integer) g;
 		studentID = sID;
+		LocalDate todayDate = LocalDate.now();
+		date = todayDate.toString();
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.US);
+		LocalTime todayTime = LocalTime.now();
+		time = formatter.format(todayTime);
+		
 	}
 	
 
@@ -34,10 +52,14 @@ public class Student implements Comparable<Student>{
 		name = other.name;
 		grade = other.grade;
 		studentID = other.studentID;
+		LocalDate todayDate = LocalDate.now();
+		date = todayDate.toString();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.US);
+		LocalTime todayTime = LocalTime.now();
+		time = formatter.format(todayTime);
+
 	}
-	/**
-	 * compareTo. Compares by size of studentID.
-	 */
+
 	
 	/**
 	 * Gets name of student
@@ -92,18 +114,35 @@ public class Student implements Comparable<Student>{
 	public void setNote(String note) {
 		this.note = note;
 	}
+	
+	public String getTime(){
+		return time;
+	}
+	
+	public String getDate(){
+		return date;
+	}
 
-
-
-
-
+	public String getExcused() {
+		return excused;
+	}
+	public void setExcused(String excused) {
+		this.excused = excused;
+	}
+	public void setArrTime(String arrTime) {
+		this.arrTime = arrTime;
+	}
+	public String getArrTime() {
+		return arrTime;
+	}
+	
 	@Override
 	public int compareTo(Student o) {
 		return toString().compareTo(o.toString());
 	}
 	
+	public boolean equals(Student other){
+		return (other.name == name)&& (other.studentID == studentID) && (other.grade == grade);
+	}
 
-
-	
-	
 }

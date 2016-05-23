@@ -94,7 +94,7 @@ public class StudentList {
 		return res;
 	}
 	public ArrayList<Student> getStudentList(){
-		return (ArrayList<Student>) nameMap.values();
+		return new ArrayList<Student>(nameMap.values());
 		
 	}
 	
