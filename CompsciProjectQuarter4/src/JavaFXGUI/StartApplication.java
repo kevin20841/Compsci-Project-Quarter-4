@@ -14,16 +14,14 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.control.*;
 import javafx.util.Duration;
 import backend.Student;
 import backend.StudentList;
-import backend.StudentProperty;
+
 @SuppressWarnings("restriction")
 public class StartApplication extends Application {
 	private StackPane content;
 	private MenuTabPane tabPane;
-	private FadeTransition dimTransition;
 	private FadeTransition brightenTransition;
 	private BorderPane optionBorderPane;
 	private HashMap<String, StudentList> data;
@@ -38,7 +36,7 @@ public class StartApplication extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		stage = primaryStage;
 		StudentList studentData =  readStudentDatabase("src/data/SMCS10_noGrades.mer");
-		StudentList studentOut = new StudentList();
+		System.out.println(studentData.size());
 		StudentList studentIn = new StudentList();
 		StudentList studentOutIn = new StudentList();
 		data = new HashMap<String, StudentList>();
@@ -68,16 +66,16 @@ public class StartApplication extends Application {
 		optionBorderPane.getStyleClass().add("optionContent");
 		optionBorderPane.setOpacity(0);
 		contentPane = new HBox();
-
+		
 		
 		contentPane.getStyleClass().add("ContentPane");
  
 
-		contentPane.setPrefHeight(primaryStage.getHeight()-100);
-		contentPane.setMaxHeight(primaryStage.getHeight()-100);
+		contentPane.setPrefHeight(primaryStage.getHeight()-200);
+		contentPane.setMaxHeight(primaryStage.getHeight()-200);
 
-		contentPane.setPrefWidth(primaryStage.getWidth()-100);
-		contentPane.setMaxWidth(primaryStage.getWidth()-100);
+		contentPane.setPrefWidth(primaryStage.getWidth()-200);
+		contentPane.setMaxWidth(primaryStage.getWidth()-200);
 
 
 
@@ -85,7 +83,7 @@ public class StartApplication extends Application {
 
 		optionBorderPane.setCenter(contentPane);
 
-		brightenTransition = new FadeTransition(Duration.millis(250), optionBorderPane);
+		brightenTransition = new FadeTransition(Duration.millis(100), optionBorderPane);
 		brightenTransition.setFromValue(0);
 		brightenTransition.setToValue(1.0);
 		brightenTransition.setCycleCount(1);
@@ -98,7 +96,7 @@ public class StartApplication extends Application {
 
 	public void showOptionsPage(){
 		content.getChildren().add(optionBorderPane);
-		SettingHBox optionBorderContentHBox = new SettingHBox(this, stage.getWidth() - 102, data);
+		PasswordLock optionBorderContentHBox = new PasswordLock(this, stage.getWidth() - 102, data);
 		contentPane.getChildren().clear();
 		contentPane.getChildren().add(optionBorderContentHBox);
 		brightenTransition.play();
@@ -107,8 +105,8 @@ public class StartApplication extends Application {
 	
 	public void hideOptionsPage(){
 		content.getChildren().remove(optionBorderPane);
-
 	}
+	
 	@SuppressWarnings("resource")
 	public StudentList readStudentDatabase(String fileName){
 		StudentList list = new StudentList();
@@ -158,14 +156,7 @@ public class StartApplication extends Application {
 	}
 
 
-	public void dim(){
-		dimTransition.play();
-	}
 
-	public void brighten(){
-		brightenTransition.play();
-	}
-	
 	
 
 

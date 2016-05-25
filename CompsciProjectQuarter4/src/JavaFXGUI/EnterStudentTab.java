@@ -4,16 +4,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-import javax.xml.crypto.Data;
-
 import javafx.scene.input.MouseEvent;
 import backend.Student;
 import backend.StudentList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,7 +18,6 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
-import javafx.util.Duration;
 
 
 @SuppressWarnings("restriction")

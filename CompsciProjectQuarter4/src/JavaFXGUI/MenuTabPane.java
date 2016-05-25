@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 import backend.StudentList;
 import javafx.scene.control.*;
-import javafx.util.Duration;
-import javafx.animation.*;
 
 @SuppressWarnings("restriction")
 public class MenuTabPane extends TabPane{

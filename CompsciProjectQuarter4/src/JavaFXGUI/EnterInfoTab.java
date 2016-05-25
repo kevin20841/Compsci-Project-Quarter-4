@@ -1,11 +1,8 @@
 package JavaFXGUI;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Scanner;
 
 import backend.Student;
