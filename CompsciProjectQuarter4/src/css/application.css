@@ -443,6 +443,13 @@
   -fx-border-color: #4cae4c !important;
 }
 
+.saveButton:disabled{
+  -fx-color: #fff;
+  -fx-background-color: #5cb85c;
+  -fx-border-color: #4cae4c;
+}
+
+
 .loadButton{
   -fx-font-size: 10pt;
   -fx-background-color: #5bc0de;
@@ -487,3 +494,85 @@
    -fx-font-size: 12;
    -fx-pref-height: 10;
 }
+.passwordTextField-error{
+    -fx-focus-color: #EF9A9A;
+    -fx-faint-focus-color: #d3524422;
+
+    -fx-highlight-fill: -fx-accent;
+    -fx-highlight-text-fill: white;
+    -fx-background-color:
+        -fx-focus-color,
+        -fx-control-inner-background,
+        -fx-faint-focus-color,
+        linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);
+    -fx-background-insets: -0.2, 1, -1.4, 3;
+    -fx-background-radius: 3, 2, 4, 0;
+    -fx-prompt-text-fill: transparent;
+     -fx-font-size: 12;
+   -fx-pref-height: 10;
+
+}
+
+.passwordTextField-success{
+    -fx-focus-color: #4CBB17;
+    -fx-faint-focus-color: rgb(131, 245, 44, 0.4);
+
+    -fx-highlight-fill: -fx-accent;
+    -fx-highlight-text-fill: white;
+    -fx-background-color:
+        -fx-focus-color,
+        -fx-control-inner-background,
+        -fx-faint-focus-color,
+        linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);
+    -fx-background-insets: -0.2, 1, -1.4, 3;
+    -fx-background-radius: 3, 2, 4, 0;
+    -fx-prompt-text-fill: transparent;
+    -fx-font-size: 12;
+   -fx-pref-height: 10;
+}
+
+
+
+
+.alertBox{
+    -fx-background-color: #fff;
+}
+.alertBox > *.button-bar > *.container{
+    -fx-background-color: #fff;
+}
+.alertBox > *.label.content{
+    -fx-font-size: 16;
+	-fx-alignment: center;
+}
+.alertBox:header *.header-panel{
+    -fx-background-color: #fff;
+    -fx-alignment: center;
+}
+.alertBox:header *.header-panel *.label{
+    -fx-font-size: 18px;
+    -fx-font-style: italic;
+    -fx-fill: #fff;
+}
+
+.changePasswordButton {
+  -fx-border-radius: 4px;
+  -fx-background-radius: 4px;
+  -fx-padding: 6px 12px 6px 12px;
+  -fx-text-fill: #ffffff;
+  -fx-background-color: #f0ad4e;
+  -fx-border-color: #eea236;
+  -fx-font-size: 14px;
+}
+.changePasswordButton:hover {
+  -fx-text-fill: #ffffff;
+  -fx-background-color: #ec971f;
+  -fx-border-color: #d58512;
+
+}
+
+.changePasswordButton:armed {
+  -fx-text-fill: #ffffff !important;
+  -fx-background-color: #ec971f !important; 
+  -fx-border-color: #d58512 !important;
+}
+

@@ -17,7 +17,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import backend.Student;
 import backend.StudentList;
-
+import javafx.scene.control.*;
+import javafx.stage.Modality;
 @SuppressWarnings("restriction")
 public class StartApplication extends Application {
 	private StackPane content;
@@ -27,7 +28,7 @@ public class StartApplication extends Application {
 	private HashMap<String, StudentList> data;
 	private HBox contentPane;
 	public Stage stage;
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -35,8 +36,7 @@ public class StartApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		stage = primaryStage;
-		StudentList studentData =  readStudentDatabase("src/data/SMCS10_noGrades.mer");
-		System.out.println(studentData.size());
+		StudentList studentData =  readStudentDatabase("src/data/SchoolDatabase.mer");
 		StudentList studentIn = new StudentList();
 		StudentList studentOutIn = new StudentList();
 		data = new HashMap<String, StudentList>();
@@ -66,16 +66,16 @@ public class StartApplication extends Application {
 		optionBorderPane.getStyleClass().add("optionContent");
 		optionBorderPane.setOpacity(0);
 		contentPane = new HBox();
-		
-		
+
+
 		contentPane.getStyleClass().add("ContentPane");
- 
 
-		contentPane.setPrefHeight(primaryStage.getHeight()-200);
-		contentPane.setMaxHeight(primaryStage.getHeight()-200);
 
-		contentPane.setPrefWidth(primaryStage.getWidth()-200);
-		contentPane.setMaxWidth(primaryStage.getWidth()-200);
+		contentPane.setPrefHeight(primaryStage.getHeight()-100);
+		contentPane.setMaxHeight(primaryStage.getHeight()-100);
+
+		contentPane.setPrefWidth(primaryStage.getWidth()-100);
+		contentPane.setMaxWidth(primaryStage.getWidth()-100);
 
 
 
@@ -88,8 +88,8 @@ public class StartApplication extends Application {
 		brightenTransition.setToValue(1.0);
 		brightenTransition.setCycleCount(1);
 
-		
-		
+
+
 
 
 	}
@@ -101,63 +101,72 @@ public class StartApplication extends Application {
 		contentPane.getChildren().add(optionBorderContentHBox);
 		brightenTransition.play();
 	}
-	
-	
+
+
 	public void hideOptionsPage(){
 		content.getChildren().remove(optionBorderPane);
 	}
-	
+
 	@SuppressWarnings("resource")
 	public StudentList readStudentDatabase(String fileName){
-		StudentList list = new StudentList();
-		Scanner file = null;
-		try {
-			file = new Scanner(new File(fileName));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		//create Map of Fields (line 1)
-		Map<String, Integer> field = new HashMap<String,Integer>();
-		int i = 0;
-		for(String fieldName: file.nextLine().split(",")){
-			field.put(fieldName.trim(), i++);
-		}
-		
-		//Load in student data
-		ArrayList<ArrayList<String>> studentData = new ArrayList<ArrayList<String>>();
-		while(file.hasNext()){
-			ArrayList<String> aStudent = new ArrayList<String>();
-			for(String studentField: file.nextLine().split("\",\"")){
-				aStudent.add(studentField.trim());
+		try{
+			StudentList list = new StudentList();
+			Scanner file = null;
+			try {
+				file = new Scanner(new File(fileName));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
 			}
-			studentData.add(aStudent);
-		}
-			
-		//eliminate duplicates
-		for(i = 0; i < studentData.size();  i++){
-			String id = studentData.get(i).get(field.get("ID"));
-			for(int j = studentData.size() - 1; j > i; j--){
-				String id2 = studentData.get(j).get(field.get("ID"));
-				if(id.equals(id2)){
-					studentData.remove(j);
+			//create Map of Fields (line 1)
+			Map<String, Integer> field = new HashMap<String,Integer>();
+			int i = 0;
+			for(String fieldName: file.nextLine().split(",")){
+				field.put(fieldName.trim(), i++);
+			}
+
+			//Load in student data
+			ArrayList<ArrayList<String>> studentData = new ArrayList<ArrayList<String>>();
+			while(file.hasNext()){
+				ArrayList<String> aStudent = new ArrayList<String>();
+				for(String studentField: file.nextLine().split("\",\"")){
+					aStudent.add(studentField.trim());
 				}
-			}	
+				studentData.add(aStudent);
+			}
+
+			//eliminate duplicates
+			for(i = 0; i < studentData.size();  i++){
+				String id = studentData.get(i).get(field.get("ID"));
+				for(int j = studentData.size() - 1; j > i; j--){
+					String id2 = studentData.get(j).get(field.get("ID"));
+					if(id.equals(id2)){
+						studentData.remove(j);
+					}
+				}	
+			}
+
+			for(ArrayList<String> student: studentData){
+				String id = (student.get(field.get("ID")));
+				String name = student.get(field.get("FIRST"))+" "+student.get(field.get("LAST"));
+				int grade = Integer.parseInt(student.get(field.get("GR")));
+				list.add(new Student (name,grade,id));
+
+			} 
+			return list;
+		} catch (Exception e){
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Warning");
+			alert.setHeaderText(null);
+			alert.setContentText("File format error");
+			DialogPane dialogPane = alert.getDialogPane();
+			dialogPane.getStylesheets().add("css/application.css");
+			dialogPane.getStyleClass().add("alertBox");
+			alert.initModality(Modality.APPLICATION_MODAL);
+			alert.show();
+			
+			return null;
 		}
-		
-		for(ArrayList<String> student: studentData){
-			String id = (student.get(field.get("ID")));
-			String name = student.get(field.get("FIRST"))+" "+student.get(field.get("LAST"));
-			int grade = Integer.parseInt(student.get(field.get("GR")));
-			list.add(new Student (name,grade,id));
-		
-		} 
-		return list;
-		
+
 	}
-
-
-
-	
-
 
 }

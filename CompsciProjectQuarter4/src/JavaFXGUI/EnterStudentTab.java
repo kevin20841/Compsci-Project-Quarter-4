@@ -69,7 +69,7 @@ public class EnterStudentTab extends Tab {
 		imageHBox.setPadding(new Insets(15, 12, 15, 12));
 		imageHBox.setSpacing(10);
 
-		Label studentIDLabel = new Label("Enter Student Name, ID, or scan your student card below: ");
+		Label studentIDLabel = new Label("Enter Student Name, six-digit ID, or scan your student card below: ");
 		Button submitButton = new Button("Submit");
 		submitButton.setDefaultButton(true);
 		submitButton.setPrefSize(100, 20);

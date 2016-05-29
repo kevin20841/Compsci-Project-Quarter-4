@@ -13,6 +13,7 @@ Where is your note?
 Currently in the basket
 Emailed
 In the basket within the next 3 days
+No note
 +++
 ++
 What is your reason for leaving?

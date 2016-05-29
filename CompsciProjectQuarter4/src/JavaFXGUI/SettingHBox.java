@@ -1,29 +1,30 @@
 package JavaFXGUI;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.animation.FadeTransition;
-import javafx.application.Application;
+import java.util.Optional;
+
+import javafx.util.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
-import javafx.scene.Group;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import javafx.scene.control.*;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.cell.*;
-import javafx.util.Duration;
 import javafx.collections.*;
 import backend.*;
 import javafx.scene.text.Text;
-import javafx.print.*;
 import javafx.stage.*;
-import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.scene.control.ButtonBar.ButtonData;
 
 @SuppressWarnings("restriction")
 public class SettingHBox extends HBox{
@@ -32,13 +33,18 @@ public class SettingHBox extends HBox{
 	private StartApplication parent;
 	private TableView tableSignOut;
 	private TableView tableSignIn;
+	private String passwordHash;
+	private String salt;
 	private HashMap<String, StudentList>data;
 	private String[] headers = {"Date", "Student Name", "Student ID", "Grade", "Time In", 
 			"Reason for Late Arrival", "Note Status"};
 	private String[] headersOut = {"Date", "Student Name", "Student ID", "Grade", "Reason for leaving", 
 			"Excused By", "Time of Departure", "Time of Return", "Note Status"};;
 			@SuppressWarnings({ "rawtypes", "unchecked" })
-			public SettingHBox(StartApplication p, double width, HashMap<String, StudentList>d){
+			public SettingHBox(StartApplication p, double width, 
+					HashMap<String, StudentList>d, String pHash, String s){
+				passwordHash = pHash;
+				salt = s;
 				data = d;
 				parent = p;
 				for (Student st : data.get("in").getStudentList())	{
@@ -59,23 +65,27 @@ public class SettingHBox extends HBox{
 				viewButtonHBox.setSpacing(10);
 
 				Button printButton = new Button("Print");
-				printButton.setPrefSize(100, 40);
-				printButton.setMinSize(100, 40);
+				printButton.setPrefSize(150, 40);
+				printButton.setMinSize(150, 40);
 				printButton.setOnAction(e -> print(true));
 
 				Button loadButton = new Button("Load");
-				loadButton.setPrefSize(100, 40);
-				loadButton.setMinSize(100, 40);
+				loadButton.setPrefSize(150, 40);
+				loadButton.setMinSize(150, 40);
 				loadButton.getStyleClass().add("loadButton");
 				loadButton.setOnAction(e -> openFile());
 
 				Button saveButton = new Button("Save");
-				saveButton.setPrefSize(100, 40);
-				saveButton.setMinSize(100, 40);
+				saveButton.setPrefSize(150, 40);
+				saveButton.setMinSize(150, 40);
 				saveButton.getStyleClass().add("saveButton");
 				saveButton.setOnAction(e -> saveFile());
 
-
+				Button changePasswordButton = new Button("Change Password");
+				changePasswordButton.setPrefSize(150, 40);
+				changePasswordButton.setMinSize(150, 40);
+				changePasswordButton.getStyleClass().add("changePasswordButton");
+				changePasswordButton.setOnAction(e -> changePassword());
 
 				Button closeButton = new Button("Close");
 				closeButton.setPrefSize(100, 40);
@@ -84,7 +94,7 @@ public class SettingHBox extends HBox{
 				closeButton.getStyleClass().add("closeButton");
 
 				viewButtonHBox.getChildren().add(closeButton);
-				buttonVBox.getChildren().addAll(printButton, loadButton, saveButton);
+				buttonVBox.getChildren().addAll(printButton, loadButton, saveButton, changePasswordButton);
 
 				buttonVBox.setPadding(new Insets(15, 15, 15, 15));
 				buttonVBox.setSpacing(20);
@@ -158,7 +168,7 @@ public class SettingHBox extends HBox{
 				ArrayList<TableColumn> columnListOut = new ArrayList<TableColumn>();
 
 
-				double[] widthsOut = {0.05, 0.125, 0.10, 0.05, 0.15, 0.1, 0.15, 0.125, 0.15}; 
+				double[] widthsOut = {0.075, 0.125, 0.115, 0.05, 0.15, 0.1, 0.15, 0.125, 0.11}; 
 
 				for(int i = 0; i < headersOut.length; i++){
 					columnListOut.add(createTableColumn(headersOut[i]));
@@ -230,13 +240,34 @@ public class SettingHBox extends HBox{
 			private void openFile(){
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Open Database File");
-				fileChooser.getExtensionFilters().addAll(
-						new ExtensionFilter("Database Files", "*.mer"));
+				//fileChooser.getExtensionFilters().addAll(
+				//new ExtensionFilter("Database Files", "*.mer"));
 				File selectedFile = fileChooser.showOpenDialog(parent.stage);
 				if (selectedFile != null){
 					StudentList studentData =  parent.readStudentDatabase(selectedFile.getPath());
-					data.put("database", studentData);
+					if (studentData != null){
+						data.put("database", studentData);
+						String text = "";
+						try {
+							text = new String(Files.readAllBytes(Paths.get(selectedFile.getPath())), StandardCharsets.UTF_8);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+
+							e.printStackTrace();
+						}
+						try {
+							PrintWriter writer = new PrintWriter(new FileOutputStream("src/data/SchoolDatabase.mer", false));
+							writer.print(text);
+							writer.close();
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
 				}
+
+
 			}
 
 			private void saveFile(){
@@ -251,7 +282,7 @@ public class SettingHBox extends HBox{
 					try {
 						writer = new PrintWriter(selectedFile.getPath() + "/" + date + "-Sign-In.csv");
 					} catch (FileNotFoundException e) {
-						System.out.println("EROROR");
+						System.out.println("ERROR");
 						e.printStackTrace();
 					}
 
@@ -301,4 +332,205 @@ public class SettingHBox extends HBox{
 					writerOutIn.close();
 				}
 			}
+			public void changePassword(){
+
+				Dialog<Pair<String, String>> dialog = new Dialog<>();
+				dialog.setTitle("Change Password");
+				dialog.setHeaderText("Please enter your old, then new password below");
+				ButtonType loginButtonType = new ButtonType("Change", ButtonData.OK_DONE);
+				dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+				GridPane grid = new GridPane();
+				grid.setHgap(10);
+				grid.setVgap(10);
+				grid.setPadding(new Insets(20, 150, 10, 10));
+
+				PasswordField oldPasswordTextField = new PasswordField();
+				oldPasswordTextField.setPromptText("Old Password");
+				oldPasswordTextField.setPrefWidth(250);
+				oldPasswordTextField.getStyleClass().add("passwordTextField");
+
+				PasswordField newPasswordTextField = new PasswordField();
+				newPasswordTextField.setPromptText("New Password");
+				newPasswordTextField.setPrefWidth(250);
+				newPasswordTextField.getStyleClass().add("passwordTextField");
+
+
+				PasswordField newRepeatPasswordTextField = new PasswordField();
+				newRepeatPasswordTextField.setPromptText("Repeat New Password");
+				newRepeatPasswordTextField.setPrefWidth(250);
+				newRepeatPasswordTextField.getStyleClass().add("passwordTextField");
+
+				grid.add(new Label("Confirm Old Password:"), 0, 0);
+				grid.add(oldPasswordTextField, 1, 0);
+				grid.add(new Label("Enter New Password:"), 0, 1);
+				grid.add(newPasswordTextField, 1, 1);
+				grid.add(new Label("Repeat New Password:"), 0, 2);
+				grid.add(newRepeatPasswordTextField, 1, 2);
+
+				dialog.getDialogPane().setContent(grid);
+				dialog.setResultConverter(dialogButton -> {
+					if (dialogButton == loginButtonType) {
+						return new Pair<>(oldPasswordTextField.getText(), newPasswordTextField.getText());
+					}
+					return null;
+				});
+
+				Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
+				loginButton.setDisable(true);
+
+				// Do some validation (using the Java 8 lambda syntax).
+				oldPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+					loginButton.setDisable(newValue.trim().isEmpty() || 
+							!(passwordHash.equals( SettingConfig.generateHash(newValue, salt)))
+							|| !(newPasswordTextField.getText().equals(newRepeatPasswordTextField.getText())));
+					if(passwordHash.equals( SettingConfig.generateHash(newValue, salt))){
+						if (oldPasswordTextField.getStyleClass().size() == 4){
+							oldPasswordTextField.getStyleClass().add("passwordTextField-success");
+						}
+						else{
+							oldPasswordTextField.getStyleClass().remove(4);
+							oldPasswordTextField.getStyleClass().add("passwordTextField-success");
+						}
+					}
+					else{
+						if (oldPasswordTextField.getStyleClass().size() == 4){
+							oldPasswordTextField.getStyleClass().add("passwordTextField-error");
+						}
+						else{
+							oldPasswordTextField.getStyleClass().remove(4);
+							oldPasswordTextField.getStyleClass().add("passwordTextField-error");
+						}
+					}
+				});
+
+
+
+				newPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+					loginButton.setDisable(newValue.trim().isEmpty() || 
+							!(passwordHash.equals( SettingConfig.generateHash(newValue, salt)))
+							|| !(newPasswordTextField.getText().equals(newRepeatPasswordTextField.getText())));
+					if(newPasswordTextField.getText().equals(newRepeatPasswordTextField.getText())){
+						if (newPasswordTextField.getStyleClass().size() == 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() == 4){
+							newPasswordTextField.getStyleClass().add("passwordTextField-success");
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-success");
+						}
+						else if(newPasswordTextField.getStyleClass().size() != 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() == 4){
+							newPasswordTextField.getStyleClass().remove(4);
+							newPasswordTextField.getStyleClass().add("passwordTextField-success");
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-success");
+						}
+						else if(newPasswordTextField.getStyleClass().size() == 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() != 4){
+							newRepeatPasswordTextField.getStyleClass().remove(4);
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-success");
+							newPasswordTextField.getStyleClass().add("passwordTextField-success");
+						}
+						else{
+							newPasswordTextField.getStyleClass().remove(4);
+							newPasswordTextField.getStyleClass().add("passwordTextField-success");
+							newRepeatPasswordTextField.getStyleClass().remove(4);
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-success");
+						}
+					}
+					else{
+						if (newPasswordTextField.getStyleClass().size() == 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() == 4){
+							newPasswordTextField.getStyleClass().add("passwordTextField-error");
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-error");
+						}
+						else if(newPasswordTextField.getStyleClass().size() != 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() == 4){
+							newPasswordTextField.getStyleClass().remove(4);
+							newPasswordTextField.getStyleClass().add("passwordTextField-error");
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-error");
+						}
+						else if(newPasswordTextField.getStyleClass().size() == 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() != 4){
+							newRepeatPasswordTextField.getStyleClass().remove(4);
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-error");
+							newPasswordTextField.getStyleClass().add("passwordTextField-error");
+						}
+						else{
+							newPasswordTextField.getStyleClass().remove(4);
+							newPasswordTextField.getStyleClass().add("passwordTextField-error");
+							newRepeatPasswordTextField.getStyleClass().remove(4);
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-error");
+						}
+					}
+
+				});
+
+
+				newRepeatPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+					loginButton.setDisable(newValue.trim().isEmpty() || 
+							!(passwordHash.equals( SettingConfig.generateHash(newValue, salt)))
+							|| !(newPasswordTextField.getText().equals(newRepeatPasswordTextField.getText())));
+					if(newPasswordTextField.getText().equals(newRepeatPasswordTextField.getText())){
+						if (newPasswordTextField.getStyleClass().size() == 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() == 4){
+							newPasswordTextField.getStyleClass().add("passwordTextField-success");
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-success");
+						}
+						else if(newPasswordTextField.getStyleClass().size() != 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() == 4){
+							newPasswordTextField.getStyleClass().remove(4);
+							newPasswordTextField.getStyleClass().add("passwordTextField-success");
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-success");
+						}
+						else if(newPasswordTextField.getStyleClass().size() == 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() != 4){
+							newRepeatPasswordTextField.getStyleClass().remove(4);
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-success");
+							newPasswordTextField.getStyleClass().add("passwordTextField-success");
+						}
+						else{
+							newPasswordTextField.getStyleClass().remove(4);
+							newPasswordTextField.getStyleClass().add("passwordTextField-success");
+							newRepeatPasswordTextField.getStyleClass().remove(4);
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-success");
+						}
+					}
+					else{
+						if (newPasswordTextField.getStyleClass().size() == 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() == 4){
+							newPasswordTextField.getStyleClass().add("passwordTextField-error");
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-error");
+						}
+						else if(newPasswordTextField.getStyleClass().size() != 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() == 4){
+							newPasswordTextField.getStyleClass().remove(4);
+							newPasswordTextField.getStyleClass().add("passwordTextField-error");
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-error");
+						}
+						else if(newPasswordTextField.getStyleClass().size() == 4 && 
+								newRepeatPasswordTextField.getStyleClass().size() != 4){
+							newRepeatPasswordTextField.getStyleClass().remove(4);
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-error");
+							newPasswordTextField.getStyleClass().add("passwordTextField-error");
+						}
+						else{
+							newPasswordTextField.getStyleClass().remove(4);
+							newPasswordTextField.getStyleClass().add("passwordTextField-error");
+							newRepeatPasswordTextField.getStyleClass().remove(4);
+							newRepeatPasswordTextField.getStyleClass().add("passwordTextField-error");
+						}
+					}
+				});
+				dialog.getDialogPane().getStylesheets().add("css/application.css");
+				ButtonBar buttonBar = (ButtonBar)dialog.getDialogPane().lookup(".button-bar");
+				buttonBar.getButtons().get(0).getStyleClass().add("saveButton");
+				buttonBar.getButtons().get(1).getStyleClass().add("closeButton");
+
+
+				Optional<Pair<String, String>> result = dialog.showAndWait();
+
+				result.ifPresent(newOldPassword -> {
+					SettingConfig.writeSettingsFile("src/data/settings.config", newOldPassword.getValue());
+				});
+
+
+			}
+
 }

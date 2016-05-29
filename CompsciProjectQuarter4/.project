@@ -21,9 +21,9 @@
 			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/css/fextile.css</location>
 		</link>
 		<link>
-			<name>src/data/SMCS10_noGrades.mer</name>
+			<name>src/data/SchoolDatabase.mer</name>
 			<type>1</type>
-			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/data/SMCS10_noGrades.mer</location>
+			<location>/Users/Kevin/CompsciProjectQuarter4/CompsciProjectQuarter4/src/data/SchoolDatabase.mer</location>
 		</link>
 		<link>
 			<name>src/img/gifCheckmark.gif</name>
