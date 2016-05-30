@@ -71,7 +71,6 @@ public class StartTab extends Tab {
 		parent.getSelectionModel().select(tab2);
 		
 	}
-
 	
 	
 	public void displaySucess(){

@@ -2,6 +2,7 @@ package JavaFXGUI;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,9 +37,25 @@ public class StartApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		stage = primaryStage;
-		StudentList studentData =  readStudentDatabase("src/data/SchoolDatabase.mer");
+		StudentList studentData =  readStudentDatabase("src/data/SchoolDatabase.mer", "d");
 		StudentList studentIn = new StudentList();
 		StudentList studentOutIn = new StudentList();
+		
+		LocalDate todayDate = LocalDate.now();
+		String date = todayDate.toString();
+		File f = new File("src/backup/" + date+"-IN.bup");
+		if(f.exists() && !f.isDirectory()) { 
+			studentIn = readStudentDatabase(f.getPath(), "i");
+		}
+
+		
+		f = new File("src/backup/" + date+"-OUT.bup");
+		if(f.exists() && !f.isDirectory()) { 
+			studentOutIn = readStudentDatabase(f.getPath(), "o");
+		}
+
+		
+		
 		data = new HashMap<String, StudentList>();
 		data.put("database", studentData);
 		data.put("in", studentIn);
@@ -77,20 +94,12 @@ public class StartApplication extends Application {
 		contentPane.setPrefWidth(primaryStage.getWidth()-100);
 		contentPane.setMaxWidth(primaryStage.getWidth()-100);
 
-
-
-
-
 		optionBorderPane.setCenter(contentPane);
 
 		brightenTransition = new FadeTransition(Duration.millis(100), optionBorderPane);
 		brightenTransition.setFromValue(0);
 		brightenTransition.setToValue(1.0);
 		brightenTransition.setCycleCount(1);
-
-
-
-
 
 	}
 
@@ -108,7 +117,7 @@ public class StartApplication extends Application {
 	}
 
 	@SuppressWarnings("resource")
-	public StudentList readStudentDatabase(String fileName){
+	public StudentList readStudentDatabase(String fileName, String opt){
 		try{
 			StudentList list = new StudentList();
 			Scanner file = null;
@@ -128,10 +137,14 @@ public class StartApplication extends Application {
 			ArrayList<ArrayList<String>> studentData = new ArrayList<ArrayList<String>>();
 			while(file.hasNext()){
 				ArrayList<String> aStudent = new ArrayList<String>();
-				for(String studentField: file.nextLine().split("\",\"")){
+				String line = file.nextLine();
+				line = line.substring(1);
+				line = line.substring(0,line.length()-1);
+				for(String studentField: line.split("\",\"")){
 					aStudent.add(studentField.trim());
 				}
 				studentData.add(aStudent);
+
 			}
 
 			//eliminate duplicates
@@ -144,14 +157,42 @@ public class StartApplication extends Application {
 					}
 				}	
 			}
-
-			for(ArrayList<String> student: studentData){
-				String id = (student.get(field.get("ID")));
-				String name = student.get(field.get("FIRST"))+" "+student.get(field.get("LAST"));
-				int grade = Integer.parseInt(student.get(field.get("GR")));
-				list.add(new Student (name,grade,id));
-
-			} 
+			if (opt == "d"){
+				for(ArrayList<String> student: studentData){
+					String id = (student.get(field.get("ID")));
+					String name = student.get(field.get("FIRST"))+" "+student.get(field.get("LAST"));
+					int grade = Integer.parseInt(student.get(field.get("GR")));
+					list.add(new Student (name,grade,id));
+				}
+			}
+			else if (opt == "i"){
+				for(ArrayList<String> student: studentData){
+					String id = student.get(field.get("ID"));
+					String name = student.get(field.get("NAME"));
+					int grade = Integer.parseInt(student.get(field.get("GR")));
+					Student st = new Student (name,grade,id);
+					st.setTime(student.get(field.get("TIME")));
+					st.setReason(student.get(field.get("REASON")));
+					st.setNote(student.get(field.get("NOTE")));
+					st.setDate(student.get(field.get("DATE")));
+					list.add(st);
+				}
+			}
+			else if (opt == "o"){
+				for(ArrayList<String> student: studentData){
+					String id = student.get(field.get("ID"));
+					String name = student.get(field.get("NAME"));
+					int grade = Integer.parseInt(student.get(field.get("GR")));
+					Student st = new Student (name,grade,id);
+					st.setTime(student.get(field.get("TIME")));
+					st.setReason(student.get(field.get("REASON")));
+					st.setNote(student.get(field.get("NOTE")));
+					st.setArrTime(student.get(field.get("ARRTIME")));
+					st.setExcused(student.get(field.get("EXCUSED")));
+					st.setDate(student.get(field.get("DATE")));
+					list.add(st);
+				}
+			}
 			return list;
 		} catch (Exception e){
 			Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -163,10 +204,9 @@ public class StartApplication extends Application {
 			dialogPane.getStyleClass().add("alertBox");
 			alert.initModality(Modality.APPLICATION_MODAL);
 			alert.show();
-			
 			return null;
 		}
-
 	}
+
 
 }

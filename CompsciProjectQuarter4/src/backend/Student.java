@@ -119,10 +119,16 @@ public class Student implements Comparable<Student>{
 		return time;
 	}
 	
+	public void setTime(String t){
+		time = t;
+	}
+	
 	public String getDate(){
 		return date;
 	}
-
+	public void setDate(String d){
+		date = d;
+	}
 	public String getExcused() {
 		return excused;
 	}
@@ -136,13 +142,13 @@ public class Student implements Comparable<Student>{
 		return arrTime;
 	}
 	
-	@Override
+
 	public int compareTo(Student o) {
 		return toString().compareTo(o.toString());
 	}
 	
 	public boolean equals(Student other){
-		return (other.name == name)&& (other.studentID == studentID) && (other.grade == grade);
+		return this.toString().equals(other.toString());
 	}
 
 }

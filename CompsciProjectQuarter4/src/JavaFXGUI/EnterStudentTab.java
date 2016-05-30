@@ -1,9 +1,15 @@
 package JavaFXGUI;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+
 import javafx.scene.input.MouseEvent;
 import backend.Student;
 import backend.StudentList;
@@ -213,6 +219,36 @@ public class EnterStudentTab extends Tab {
 			String time = formatter.format(todayTime);
 
 			data.get("outin").getStudentList().get(j).setArrTime(time);
+			LocalDate todayDate = LocalDate.now();
+			String date = todayDate.toString();
+			File f = new File("src/backup/" + date+"-OUT.bup");
+			try {
+				f.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			try {
+				PrintWriter printWriter = new PrintWriter (f);
+				printWriter.println("DATE,ID,NAME,GR,REASON,EXCUSED,TIME,ARRTIME,NOTE");
+				for(Student st : data.get("outin").getStudentList()){
+					printWriter.print("\"" + st.getDate() + "\",");
+					printWriter.print("\"" + st.getStudentID() + "\",");
+					printWriter.print("\"" + st.getName() + "\",");
+					printWriter.print("\"" + st.getGrade() + "\",");
+					printWriter.print("\"" + st.getReason() + "\",");
+					printWriter.print("\"" + st.getExcused() + "\",");
+					printWriter.print("\"" + st.getTime() + "\",");
+					printWriter.print("\"" + st.getArrTime() + "\",");
+					printWriter.print("\"" + st.getNote() + "\"");
+					printWriter.println();
+				}
+				printWriter.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			goBack(true);
 		}
 		else 
@@ -227,7 +263,6 @@ public class EnterStudentTab extends Tab {
 			parent.getTabs().add(tab3);
 			parent.getSelectionModel().select(tab3);
 		}
-		
 
 	}
 

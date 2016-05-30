@@ -1,6 +1,9 @@
 package JavaFXGUI;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -123,7 +126,6 @@ public class EnterInfoTab extends Tab{
 
 
 		if (!goingIn){
-
 			student.setReason(option.get(0));
 			student.setExcused(option.get(1));
 			student.setNote(option.get(2));
@@ -134,6 +136,65 @@ public class EnterInfoTab extends Tab{
 			student.setNote(option.get(1));
 			data.get("in").add(student);
 		}
+
+		LocalDate todayDate = LocalDate.now();
+		String date = todayDate.toString();
+		File f = new File("src/backup/" + date+"-IN.bup");
+		try {
+			f.createNewFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			PrintWriter printWriter = new PrintWriter (f);
+			printWriter.println("DATE,ID,NAME,GR,TIME,REASON,NOTE");
+			for(Student st : data.get("in").getStudentList()){
+				printWriter.print("\"" + st.getDate() + "\",");
+				printWriter.print("\"" + st.getStudentID() + "\",");
+				printWriter.print("\"" + st.getName() + "\",");
+				printWriter.print("\"" + st.getGrade() + "\",");
+				printWriter.print("\"" + st.getTime() + "\",");
+				printWriter.print("\"" + st.getReason() + "\",");
+				printWriter.print("\"" + st.getNote() + "\"");
+				printWriter.println();
+			}
+			printWriter.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		f = new File("src/backup/" + date+"-OUT.bup");
+		try {
+			f.createNewFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			PrintWriter printWriter = new PrintWriter (f);
+			printWriter.println("DATE,ID,NAME,GR,REASON,EXCUSED,TIME,ARRTIME,NOTE");
+			for(Student st : data.get("outin").getStudentList()){
+				printWriter.print("\"" + st.getDate() + "\",");
+				printWriter.print("\"" + st.getStudentID() + "\",");
+				printWriter.print("\"" + st.getName() + "\",");
+				printWriter.print("\"" + st.getGrade() + "\",");
+				printWriter.print("\"" + st.getReason() + "\",");
+				printWriter.print("\"" + st.getExcused() + "\",");
+				printWriter.print("\"" + st.getTime() + "\",");
+				printWriter.print("\"" + st.getArrTime() + "\",");
+				printWriter.print("\"" + st.getNote() + "\"");
+				printWriter.println();
+			}
+			printWriter.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		goBack();
 		previous.goBack(true);
 	}

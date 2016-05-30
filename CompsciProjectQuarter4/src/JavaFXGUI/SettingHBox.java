@@ -36,9 +36,9 @@ public class SettingHBox extends HBox{
 	private String passwordHash;
 	private String salt;
 	private HashMap<String, StudentList>data;
-	private String[] headers = {"Date", "Student Name", "Student ID", "Grade", "Time In", 
+	private String[] headers = {"Date", "Student ID", "Student Name", "Grade", "Time In", 
 			"Reason for Late Arrival", "Note Status"};
-	private String[] headersOut = {"Date", "Student Name", "Student ID", "Grade", "Reason for leaving", 
+	private String[] headersOut = {"Date", "Student ID", "Student Name", "Grade", "Reason for leaving", 
 			"Excused By", "Time of Departure", "Time of Return", "Note Status"};;
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public SettingHBox(StartApplication p, double width, 
@@ -244,7 +244,7 @@ public class SettingHBox extends HBox{
 				//new ExtensionFilter("Database Files", "*.mer"));
 				File selectedFile = fileChooser.showOpenDialog(parent.stage);
 				if (selectedFile != null){
-					StudentList studentData =  parent.readStudentDatabase(selectedFile.getPath());
+					StudentList studentData =  parent.readStudentDatabase(selectedFile.getPath(), "d");
 					if (studentData != null){
 						data.put("database", studentData);
 						String text = "";
@@ -356,15 +356,15 @@ public class SettingHBox extends HBox{
 
 
 				PasswordField newRepeatPasswordTextField = new PasswordField();
-				newRepeatPasswordTextField.setPromptText("Repeat New Password");
+				newRepeatPasswordTextField.setPromptText("Confirm New Password");
 				newRepeatPasswordTextField.setPrefWidth(250);
 				newRepeatPasswordTextField.getStyleClass().add("passwordTextField");
 
-				grid.add(new Label("Confirm Old Password:"), 0, 0);
+				grid.add(new Label("Enter Old Password:"), 0, 0);
 				grid.add(oldPasswordTextField, 1, 0);
 				grid.add(new Label("Enter New Password:"), 0, 1);
 				grid.add(newPasswordTextField, 1, 1);
-				grid.add(new Label("Repeat New Password:"), 0, 2);
+				grid.add(new Label("Confirm New Password:"), 0, 2);
 				grid.add(newRepeatPasswordTextField, 1, 2);
 
 				dialog.getDialogPane().setContent(grid);
@@ -409,6 +409,7 @@ public class SettingHBox extends HBox{
 					loginButton.setDisable(newValue.trim().isEmpty() || 
 							!(passwordHash.equals( SettingConfig.generateHash(newValue, salt)))
 							|| !(newPasswordTextField.getText().equals(newRepeatPasswordTextField.getText())));
+					
 					if(newPasswordTextField.getText().equals(newRepeatPasswordTextField.getText())){
 						if (newPasswordTextField.getStyleClass().size() == 4 && 
 								newRepeatPasswordTextField.getStyleClass().size() == 4){
