@@ -23,7 +23,8 @@ public class Student implements Comparable<Student>{
 	
 
 	/**
-	 *  Constructor. name is lower case so that compareTo for strings arranges by alphabetical order. studentID is Integer wrapper class for same reason.
+	 * Constructor. Initializes Date and Time at moment of creation
+	 * 
 	 * @param n		Name of student.
 	 * @param g		Grade of student.
 	 * @param sID	ID of student.
@@ -36,7 +37,7 @@ public class Student implements Comparable<Student>{
 		LocalDate todayDate = LocalDate.now();
 		date = todayDate.toString();
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.US);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a", Locale.US);
 		LocalTime todayTime = LocalTime.now();
 		time = formatter.format(todayTime);
 		
@@ -45,7 +46,8 @@ public class Student implements Comparable<Student>{
 
 
 	/**
-	 * Copy Constructor
+	 * Copy Constructor. Applies curent date and time, NOT date and time of different student.
+	 * 
 	 * @param other	Student to be copied.
 	 */
 	public Student(Student other) {
@@ -54,38 +56,26 @@ public class Student implements Comparable<Student>{
 		studentID = other.studentID;
 		LocalDate todayDate = LocalDate.now();
 		date = todayDate.toString();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.US);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a", Locale.US);
 		LocalTime todayTime = LocalTime.now();
 		time = formatter.format(todayTime);
 
 	}
 
 	
-	/**
-	 * Gets name of student
-	 * @return name of student.
-	 */
+
 	public String getName() {
 		return name;
 	}
-	/**
-	 * Gets grade of student
-	 * @return grade of student.
-	 */
+
 	public int getGrade() {
 		return grade;
 	}
-	/**
-	 * Gets studentID of student
-	 * @return studentID of student.
-	 */
+
 	public String getStudentID() {
 		return studentID;
 	}
-	/**
-	 * Gets Arrival reason of student
-	 * @return Arrival reason of student.
-	 */
+
 
 	public String toString(){
 		return  String.format("%-15s", studentID) + String.format("%-26s", name) +grade;
@@ -141,7 +131,6 @@ public class Student implements Comparable<Student>{
 	public String getArrTime() {
 		return arrTime;
 	}
-	
 
 	public int compareTo(Student o) {
 		return toString().compareTo(o.toString());

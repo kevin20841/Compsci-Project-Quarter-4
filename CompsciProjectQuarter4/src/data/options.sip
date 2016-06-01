@@ -1,6 +1,6 @@
 +++
 ++
-What is your reason for late arrival?
+Enter Reason for Late Arrival:
 Sick
 Doctor/Dentist Appointment
 Unexcused
@@ -9,26 +9,26 @@ Religious Reason
 Transportation
 College Visit
 ++
-Where is your note?
+Enter note location:
 Currently in the basket
 Emailed
 In the basket within the next 3 days
 No note
 +++
 ++
-What is your reason for leaving?
+Enter reason for leaving:
 Sick
 Doctor/Dentist Appointment
 Religious Reason
 College Visit
 ++
-Who were you excused by?
+Enter who you were excused by: 
 Health Room
 Parent
 ++
-Where is your note?
+Enter note location:
 Currently in the basket
 Emailed
-In the basket within the next 3 days
+
 
 

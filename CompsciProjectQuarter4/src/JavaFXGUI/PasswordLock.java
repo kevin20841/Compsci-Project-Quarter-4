@@ -12,6 +12,10 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import backend.StudentList;
 
+/**
+ * A pane that locks whatever is inside it from view unless the correct password is added.
+ * @author Kevin
+ */
 @SuppressWarnings("restriction")
 public class PasswordLock extends StackPane{
 	// Does not have to 100% secure, just so student's can't access this.
@@ -20,8 +24,13 @@ public class PasswordLock extends StackPane{
 	private StartApplication parent;
 	private SettingHBox optionBorderContentHBox;
 	private PasswordField passwordField;
-	
-	
+	/**
+	 * Creates the PasswordLock. Reads from a file for a salted hash of the current stored
+	 * password.
+	 * @param p The parent of this node. 
+	 * @param width The width of the child node.
+	 * @param d The data of the program.
+	 */
 	public PasswordLock(StartApplication p, double width, HashMap<String, StudentList>d){
 		SecureRandom random = new SecureRandom();
 		salt = new BigInteger(130, random).toString(32);
@@ -80,11 +89,16 @@ public class PasswordLock extends StackPane{
 		
 		getChildren().add(passwordPanel);
 	}
-	
+	/**
+	 * Hides this and the child node.
+	 */
 	private void cancel(){
 		parent.hideOptionsPage();
 	}
-	
+	/**
+	 * Sees whether or not the the submitted password is equal to the current password.
+	 * If so, disables the blur effect and unlocks the childNode for use.
+	 */
 	private void submit(){
 		String p = passwordField.getText();
 		p = SettingConfig.generateHash(p, salt);

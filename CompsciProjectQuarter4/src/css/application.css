@@ -375,7 +375,7 @@
 }
 .tab-pane .tab:selected
 {
-    -fx-background-color: #CCC;
+    -fx-background-color: #FFF;
 }
 .tab:selected .tab-label { 
     -fx-alignment: CENTER;
@@ -574,5 +574,27 @@
   -fx-text-fill: #ffffff !important;
   -fx-background-color: #ec971f !important; 
   -fx-border-color: #d58512 !important;
+}
+
+.tooltip {
+    -fx-background: #f0ad4e;
+    -fx-text-fill: white;
+    -fx-background-color: #f0ad4e;
+    -fx-background-radius: 6px;
+    -fx-background-insets: 0;
+    -fx-padding: 0.667em 0.75em 0.667em 0.75em; /* 10px */
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.5) , 10, 0.0 , 0 , 3 );
+    -fx-font-size: 14;
+    -fx-font-family: "Avenir";
+}	
+
+.summaryLabel{
+   -fx-font-size: 13;
+   -fx-font-family: "Courier New";
+}
+
+.summaryVBox{
+	-fx-padding: 20;
+	-fx-background-color: transparent;
 }
 

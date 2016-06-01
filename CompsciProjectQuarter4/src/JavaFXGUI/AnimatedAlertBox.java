@@ -8,10 +8,21 @@ import javafx.scene.layout.*;
 
 
 
+/**
+ * An Animated Alert box, either green or red, that fades in and out. Intended to be 
+ * attached to the top of a BorderPane.
+ * @author Kevin
+ */
 @SuppressWarnings("restriction")
 public class AnimatedAlertBox extends HBox{
 	private SequentialTransition  seqT; 
 	private Label studentIDLabel;
+	
+	/**
+	 * Constructor
+	 * @param defText The default text.
+	 * @param warning Whether or not the Alert is a warning, red, or not, green.
+	 */
 	public AnimatedAlertBox(String defText, boolean warning){
 		setOpacity(0);
 		studentIDLabel = new Label(defText);
@@ -43,10 +54,17 @@ public class AnimatedAlertBox extends HBox{
 		seqT = new SequentialTransition (ftIn, pt, ftOut);
 	}
 	
+	/**
+	 * Plays the animation (fades in and out) with a custom message.
+	 * @param mes The Message of the alert.
+	 */
 	public void play(String mes){
 		studentIDLabel.setText(mes);
 		seqT.play();
 	}
+	/**
+	 * Plays the animation (fades in and out) with the default message defined in the constructor.
+	 */
 	public void play(){
 		seqT.play();
 	}

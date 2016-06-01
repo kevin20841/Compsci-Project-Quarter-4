@@ -1,6 +1,10 @@
 package backend;
 import javafx.beans.property.*;
 
+/**
+ * Wrapper Class of student for implementation in a TableView.
+ * @author Kevin
+ */
 @SuppressWarnings("restriction")
 public class StudentProperty {
 	private SimpleStringProperty name;
@@ -13,6 +17,10 @@ public class StudentProperty {
 	private SimpleStringProperty excused;
 	private SimpleStringProperty arrTime;
 	
+	/**
+	 * Constructs StudentProperty from a Student and copies all the data.
+	 * @param st the Student to be copied
+	 */
 	public StudentProperty(Student st){
 		name = new SimpleStringProperty(st.getName());
 		grade = new SimpleIntegerProperty(st.getGrade());

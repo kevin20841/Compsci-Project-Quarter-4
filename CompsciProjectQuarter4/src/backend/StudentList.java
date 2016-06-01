@@ -15,8 +15,8 @@ public class StudentList {
 
 	private Map <String, Student> nameMap;
 	private Map <String, Student> studentIDMap;
-	
-	
+
+
 	/**
 	 * No args- constructor. Creates empty StudentList
 	 */
@@ -32,7 +32,7 @@ public class StudentList {
 		studentIDMap.put(student.getStudentID(), student);
 		nameMap.put(student.getName(), student);
 	}
-	
+
 
 	/**
 	 * Searches for Student in the StudentList by ID.
@@ -42,7 +42,7 @@ public class StudentList {
 	public Student getStudentByID(String sID){
 		return new Student(studentIDMap.get(sID));
 	}
-	
+
 	/**
 	 * Searches for Student in the StudentList by name.
 	 * @param 	name	The name to be searched.
@@ -53,7 +53,7 @@ public class StudentList {
 	}
 	/**
 	 * Searches for Student in the StudentList by toString value.
-	 * @param 	name	The name to be searched.
+	 * @param 	s	The name to be searched.
 	 * @return	Returns the Student with that name.
 	 */
 	public Student getStudentByToString(String s){
@@ -69,7 +69,7 @@ public class StudentList {
 		// sort(res, 0, res.size());
 		return res;
 	}
-	
+
 
 	/**
 	 * Gets list of ID + name + grade. 
@@ -84,7 +84,7 @@ public class StudentList {
 		return res;
 	}
 	/**
-	 * Gets ordered list of IDs. 
+	 * Gets list of IDs. 
 	 * @return	Returns <code> ArrayList &lt;Integer&gt;	 </code>  in numerical order,
 	 */
 	public ArrayList<String> getIDList(){
@@ -93,17 +93,29 @@ public class StudentList {
 		// sort(res, 0, res.size());
 		return res;
 	}
+
+	/**
+	 * Gets list of Students. 
+	 * @return	Returns <code> ArrayList &lt;Integer&gt;	 </code>  in numerical order,
+	 */
 	public ArrayList<Student> getStudentList(){
 		return new ArrayList<Student>(nameMap.values());
-		
 	}
-	
+	/**	 
+	 * Gets size of the StudentList
+	 * @param other Student to be checked
+	 * @return	Returns if Student is in the StudentList.
+	 */
 	public boolean contains(Student other){
 		if (nameMap.values().contains(other)){
 			return true;
 		}
 		return false;
 	}
+	/**
+	 * Gets size of the StudentList
+	 * @return	Returns size.
+	 */
 	public int size(){
 		return nameMap.values().size();
 	}

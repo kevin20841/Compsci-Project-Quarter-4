@@ -21,6 +21,10 @@ import backend.StudentList;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 @SuppressWarnings("restriction")
+/**
+ * The Main class of the program. This class is run to initialize everything. 
+ * @author Kevin
+ */
 public class StartApplication extends Application {
 	private StackPane content;
 	private MenuTabPane tabPane;
@@ -33,7 +37,12 @@ public class StartApplication extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
+	/**
+	 * Initializes all of the values. The School database is read from an internal
+	 * file "src/data/SchoolDatabase.mer." The other two StudentLists are emtpy if the
+	 * backup file does not exist, other they are populated with the backup file's data.
+	 * The data itself is stored in a HashMap of Strings and StudentLists.
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		stage = primaryStage;
@@ -102,6 +111,9 @@ public class StartApplication extends Application {
 		brightenTransition.setCycleCount(1);
 
 	}
+	/**
+	 * Shows the settings page.
+	 */
 
 	public void showOptionsPage(){
 		content.getChildren().add(optionBorderPane);
@@ -111,11 +123,20 @@ public class StartApplication extends Application {
 		brightenTransition.play();
 	}
 
-
+	/**
+	 * Hides the settings page.
+	 */
 	public void hideOptionsPage(){
 		content.getChildren().remove(optionBorderPane);
 	}
-
+	/**
+	 * Reads from a mer file. A Mer file is a .csv with an extra row on the top for headers.
+	 * No spaces are in between elements of the .csv. If there is an error, a pop-up window that displays an eroor
+	 * is displayed.
+	 * @param fileName The file path of the mer.
+	 * @param opt whcih type of data it ise (database, sign in, or signout)
+	 * @return Returns a StudentList of students in the data file.
+	 */
 	@SuppressWarnings("resource")
 	public StudentList readStudentDatabase(String fileName, String opt){
 		try{
@@ -204,7 +225,7 @@ public class StartApplication extends Application {
 			dialogPane.getStyleClass().add("alertBox");
 			alert.initModality(Modality.APPLICATION_MODAL);
 			alert.show();
-			return null;
+			return new StudentList();
 		}
 	}
 

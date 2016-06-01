@@ -8,20 +8,31 @@ import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 import javafx.event.*;
 import javafx.geometry.*;
+/**
+ * Creates a playable panel, inside which is a label, a textfield, and a button.
+ * @author Kevin
+ */
 @SuppressWarnings("restriction")
 public class OptionHBox extends HBox implements Playable{
 	private TextField textFieldOther;
 	private OptionSelect parent;
 	private AnimatedGif gfA1;
 	private AnimatedGif gfA2;
-	public OptionHBox(int width, OptionSelect p) {
+	private int page;
+	/**
+	 * Creates the playable panel. Creates two gifs.
+	 * @param width The Width of the panel.
+	 * @param p The parent of this node.
+	 */
+	public OptionHBox(int width, OptionSelect p, int pa) {
+		page = pa;
 		parent  = p;
 		
 		Label textFieldOtherLabel = new Label("Other: ");
 		textFieldOther = new TextField();
 		textFieldOther.setPrefWidth(width-300);
 		
-		Button textFieldOtherButton = new Button("Set");
+		Button textFieldOtherButton = new Button("Submit");
 		textFieldOtherButton.setOnAction(new ButtonHandler(textFieldOther.getText(), this, parent, true ));
 		textFieldOtherButton.getStyleClass().add("textFieldOtherButton");
 		
@@ -36,27 +47,45 @@ public class OptionHBox extends HBox implements Playable{
 		getChildren().addAll(gfA1.getView(), textFieldOtherLabel, textFieldOther, textFieldOtherButton);
 		setSpacing(10);
 		setAlignment(Pos.CENTER_LEFT);
+
 	}
+	/**
+	 *  Plays the animated check mark.
+	 */
 	@Override
 	public void play() {
 		getChildren().remove(0);
 		getChildren().add(0, gfA1.getView());
 		gfA1.play();
-	}
 
+	}
+	/**
+	 * Plays the animated check mark in reverse.
+	 */
 	@Override
 	public void reverse() {
 		getChildren().remove(0);
 		getChildren().add(0, gfA2.getView());
 		gfA2.play();
+
 	}
 	
+	/**
+	 * Clears the TextField inside this object
+	 */
 	public void clear(){
 		textFieldOther.clear();
 	}
 	
+	/**
+	 * Gets the text of the TextField of this object
+	 * @return The text of the textField of this object.
+	 */
 	public String getText(){
 		return textFieldOther.getText();
 	}
 	
+	public int getPage(){
+		return page;
+	}
 }

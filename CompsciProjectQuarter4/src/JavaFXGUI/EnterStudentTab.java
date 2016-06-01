@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
-
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import backend.Student;
 import backend.StudentList;
@@ -25,7 +25,11 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 
-
+/**
+ * A Tab where the Student that is signing In/Out is selected.
+ * @author Kevin
+ *
+ */
 @SuppressWarnings("restriction")
 public class EnterStudentTab extends Tab {
 	private boolean goingIn;
@@ -38,10 +42,23 @@ public class EnterStudentTab extends Tab {
 	private TextField searchTextField;
 	private AnimatedAlertBox alert;
 
+	/**
+	 * Creates a Student Tab. On each element, a tooltip is present for information. 
+	 * Also creates an AnimatedAlertBox that plays an alert whenever the selected student
+	 * does not exist.
+	 * @param par The parent of this node.
+	 * @param prev The previous tab
+	 * @param title The title of the tab
+	 * @param d The data of which students signed in or out.
+	 * @param gIn Whether or not the student is signing in or out.
+	 */
 	public EnterStudentTab(MenuTabPane par, StartTab prev, String title, HashMap<String, 
 			StudentList> d, boolean gIn){
 
 		list = new ListView<String>();
+
+
+		
 
 		goingIn = gIn;
 
@@ -75,7 +92,7 @@ public class EnterStudentTab extends Tab {
 		imageHBox.setPadding(new Insets(15, 12, 15, 12));
 		imageHBox.setSpacing(10);
 
-		Label studentIDLabel = new Label("Enter Student Name, six-digit ID, or scan your student card below: ");
+		Label studentIDLabel = new Label("Enter student name or student id: ");
 		Button submitButton = new Button("Submit");
 		submitButton.setDefaultButton(true);
 		submitButton.setPrefSize(100, 20);
@@ -111,6 +128,15 @@ public class EnterStudentTab extends Tab {
 				searchTextField.requestFocus();
 			}
 		});
+
+		Tooltip toolTextField = new Tooltip(" Enter in keywords "
+				+ "\n separated by a space. "
+				+ "\n Please type in the exact "
+				+ "\n name or student ID when "
+				+ "\n using the submit button or "
+				+ "\n pressing enter.");
+		searchTextField.setTooltip(toolTextField);
+
 		list.setMaxHeight(400);
 		list.setItems(nameEntries);
 		list.getStyleClass().add("searchTextField");
@@ -125,7 +151,6 @@ public class EnterStudentTab extends Tab {
 				if (click.getClickCount() == 2) {
 					String currentItemSelected = list.getSelectionModel().getSelectedItem();
 					list.getSelectionModel().select(-1);
-					// TODO Implement nextPage
 					moveOn(goingIn, data.get("database").getStudentByToString(currentItemSelected));
 				}
 			}
@@ -140,19 +165,35 @@ public class EnterStudentTab extends Tab {
 		setContent(content);
 	}
 
+	/**
+	 * Closes the current tab. Displays a displays a Success AlertAnimatedBox if there is a submission
+	 * as opposed to just closing the tab (the back button is clicked, for example)
+	 * @param sucess Whether or not the submission was a sucess
+	 */
 	public void goBack(boolean sucess){
 		previous.setDisable(false);
 		parent.getSelectionModel().select(previous);
 		die();
 		if (sucess){
-			previous.displaySucess();
+			previous.displaySuccess();
 		}
 	}
+	/**
+	 * Kills this tab.
+	 */
 	public void die(){
 		parent.getTabs().remove(this);
 	}
 
-
+	/**
+	 * Searches for a student within an ObservableList. Every time a key is pressed
+	 * in a textField, this method is called. Updates the ListView list accordingly. 
+	 * The search functions uses every space-separated word as a keyword, and an 
+	 * element that is deemed part of the search must have EVERY keyword.
+	 * @param entries The ObservableList of Entries
+	 * @param oldVal The previous value of the search
+	 * @param newVal The new value of the Search.
+	 */
 	public void searchStudent(ObservableList<String> entries, String oldVal, String newVal) {
 
 		if ( oldVal != null && (newVal.length() < oldVal.length()) ) {
@@ -179,28 +220,47 @@ public class EnterStudentTab extends Tab {
 		list.setItems(subentries);
 	}
 
+	/**
+	 * Manages logic for the submit Button. Plays an alert if the student was not found,
+	 * and calls moveOn otherwise 
+	 */
 	private void submitButton(){
-		String submittedText = searchTextField.getText();
-		ArrayList<String> IDList = data.get("database").getIDList();
-		ArrayList<String> NameList = data.get("database").getNameList();
+		String selected = list.getSelectionModel().getSelectedItem();
+		if (selected == null){
+			String submittedText = searchTextField.getText();
+			ArrayList<String> IDList = data.get("database").getIDList();
+			ArrayList<String> NameList = data.get("database").getNameList();
 
-		if (IDList.contains(submittedText)){
-			moveOn(goingIn, data.get("database").getStudentByID(submittedText));
-		}
-		else if (NameList.contains(submittedText)){
-			moveOn(goingIn, data.get("database").getStudentByName(submittedText));
-		}
-		else{
-			if (submittedText.trim().isEmpty() ){
-				alert.play("Please submit your name, submit your ID, or scan your Student ID");
+			if (IDList.contains(submittedText)){
+				moveOn(goingIn, data.get("database").getStudentByID(submittedText));
+			}
+			else if (NameList.contains(submittedText)){
+				moveOn(goingIn, data.get("database").getStudentByName(submittedText));
 			}
 			else{
-				alert.play("The student \"" + submittedText + "\" was not found.");
-			}
+				if (submittedText.trim().isEmpty() ){
+					alert.play("Please submit your name, submit your ID, or scan your Student ID");
+				}
+				else{
+					alert.play("The student \"" + submittedText + "\" was not found.");
+				}
 
+			}
+		}
+		else{
+			moveOn(goingIn, data.get("database").getStudentByToString(selected));
 		}
 
 	}
+
+	/**
+	 * Manages logic moving on. If the student is signing back into school (they are signing in
+	 * and they have signed out, the arrival time of the Student data structure is updated,
+	 * the backup file for the program is updated, and the user is transported to the starting Tab.
+	 * Otherwise, the appropriate version (sign-in) or (sign-out) of the EnterInfoTab is created.
+	 * @param signIn
+	 * @param student
+	 */
 	private void moveOn(boolean signIn, Student student){
 
 		EnterInfoTab tab3;
@@ -214,7 +274,7 @@ public class EnterStudentTab extends Tab {
 
 		}
 		if (outin){
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.US);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a", Locale.US);
 			LocalTime todayTime = LocalTime.now();
 			String time = formatter.format(todayTime);
 
@@ -254,10 +314,10 @@ public class EnterStudentTab extends Tab {
 		else 
 		{
 			if (signIn){
-				tab3= new EnterInfoTab(parent, this, "Sign In",  data, signIn, student);
+				tab3= new EnterInfoTab(parent, this, "Enter Information",  data, signIn, student);
 			}
 			else{
-				tab3 = new EnterInfoTab(parent, this, "Sign Out",  data, signIn, student);
+				tab3 = new EnterInfoTab(parent, this, "Enter Information",  data, signIn, student);
 			}
 			setDisable(true);
 			parent.getTabs().add(tab3);
