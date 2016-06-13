@@ -40,7 +40,7 @@ public class PasswordLock extends StackPane{
 			configScanner = new Scanner(configFile);
 			passwordHash = configScanner.nextLine();
 			salt = configScanner.nextLine();
-
+			
 			configScanner.close();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -75,7 +75,7 @@ public class PasswordLock extends StackPane{
 		Button submitButton = new Button("Submit");
 		submitButton.setOnAction(e-> submit());
 		submitButton.setDefaultButton(true);
-		
+		submitButton.getStyleClass().add("saveButton");
 		
 		buttonHBox.getChildren().addAll(cancelButton, submitButton);
 		passwordPanel.getChildren().addAll(optionLabel, passwordField, buttonHBox);

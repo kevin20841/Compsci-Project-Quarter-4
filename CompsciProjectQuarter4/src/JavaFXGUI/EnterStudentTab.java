@@ -24,6 +24,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
+import java.util.Collections;
 
 /**
  * A Tab where the Student that is signing In/Out is selected.
@@ -41,6 +42,7 @@ public class EnterStudentTab extends Tab {
 	private HashMap<String, StudentList> data;
 	private TextField searchTextField;
 	private AnimatedAlertBox alert;
+	private ObservableList<String> subentries = FXCollections.observableArrayList();
 
 	/**
 	 * Creates a Student Tab. On each element, a tooltip is present for information. 
@@ -57,8 +59,11 @@ public class EnterStudentTab extends Tab {
 
 		list = new ListView<String>();
 
+		Tooltip toolList = new Tooltip("Double click to select student, \n"
+				+ "or select student and then click submit.");
+		list.setTooltip(toolList);
 
-		
+
 
 		goingIn = gIn;
 
@@ -92,7 +97,7 @@ public class EnterStudentTab extends Tab {
 		imageHBox.setPadding(new Insets(15, 12, 15, 12));
 		imageHBox.setSpacing(10);
 
-		Label studentIDLabel = new Label("Enter student name or student id: ");
+		Label studentIDLabel = new Label("Enter student name or six-digit student id: ");
 		Button submitButton = new Button("Submit");
 		submitButton.setDefaultButton(true);
 		submitButton.setPrefSize(100, 20);
@@ -114,6 +119,7 @@ public class EnterStudentTab extends Tab {
 
 
 		nameEntries = FXCollections.observableArrayList(studentData.getInfoList());
+		FXCollections.sort(nameEntries, new StudentComparator());
 		searchTextField = new TextField();
 		searchTextField.setPromptText("Search");
 		searchTextField.textProperty().addListener(
@@ -130,11 +136,7 @@ public class EnterStudentTab extends Tab {
 		});
 
 		Tooltip toolTextField = new Tooltip(" Enter in keywords "
-				+ "\n separated by a space. "
-				+ "\n Please type in the exact "
-				+ "\n name or student ID when "
-				+ "\n using the submit button or "
-				+ "\n pressing enter.");
+				+ "\n separated by a space. ");
 		searchTextField.setTooltip(toolTextField);
 
 		list.setMaxHeight(400);
@@ -202,7 +204,7 @@ public class EnterStudentTab extends Tab {
 
 		String[] parts = newVal.toUpperCase().split(" ");
 
-		ObservableList<String> subentries = FXCollections.observableArrayList();
+		subentries = FXCollections.observableArrayList();
 		for ( Object entry: list.getItems() ) {
 			boolean match = true;
 			String entryText = (String)entry;
@@ -225,33 +227,44 @@ public class EnterStudentTab extends Tab {
 	 * and calls moveOn otherwise 
 	 */
 	private void submitButton(){
+		searchTextField.requestFocus();
 		String selected = list.getSelectionModel().getSelectedItem();
+		String submittedText = "";
 		if (selected == null){
-			String submittedText = searchTextField.getText();
-			ArrayList<String> IDList = data.get("database").getIDList();
-			ArrayList<String> NameList = data.get("database").getNameList();
-
-			if (IDList.contains(submittedText)){
-				moveOn(goingIn, data.get("database").getStudentByID(submittedText));
-			}
-			else if (NameList.contains(submittedText)){
-				moveOn(goingIn, data.get("database").getStudentByName(submittedText));
-			}
-			else{
-				if (submittedText.trim().isEmpty() ){
-					alert.play("Please submit your name, submit your ID, or scan your Student ID");
+			if (subentries.size() !=0){
+				if (subentries.size() ==1){
+					submittedText = subentries.get(0);
+					ArrayList<String> toStringList = data.get("database").getInfoList();
+					if (toStringList.contains(submittedText)){
+						moveOn(goingIn, data.get("database").getStudentByToString(submittedText));
+					}
 				}
 				else{
-					alert.play("The student \"" + submittedText + "\" was not found.");
+					alert.play("Please continue entering information until there is only one possible student.");
 				}
 
+
 			}
+			else{
+				if (searchTextField.getText().isEmpty()){
+					alert.play("Please submit your name or submit your ID.");
+				}
+				else{
+
+					alert.play("The student \"" + searchTextField.getText() + "\" was not found.");
+				}
+			}
+
+
+
+
 		}
+
 		else{
 			moveOn(goingIn, data.get("database").getStudentByToString(selected));
 		}
-
 	}
+
 
 	/**
 	 * Manages logic moving on. If the student is signing back into school (they are signing in
@@ -281,7 +294,7 @@ public class EnterStudentTab extends Tab {
 			data.get("outin").getStudentList().get(j).setArrTime(time);
 			LocalDate todayDate = LocalDate.now();
 			String date = todayDate.toString();
-			File f = new File("src/backup/" + date+"-OUT.bup");
+			File f = new File("src/backup/" + date+"-OUT.csv");
 			try {
 				f.createNewFile();
 			} catch (IOException e1) {

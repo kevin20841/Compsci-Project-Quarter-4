@@ -8,20 +8,27 @@ import javafx.animation.*;
 import javafx.event.*;
 import javafx.geometry.*;
 
+
+/**
+ * Extension of label class that flashes whenever the play() function is called.
+ * @author Kevin
+ */
 @SuppressWarnings("restriction")
 public class AnimatedLabel extends Label{
 	FadeTransition ftIn;
 	FadeTransition ftOut;
 	SequentialTransition seqBlink;
+	
+
 	public AnimatedLabel(String text){
 		super(text);
-		ftIn = new FadeTransition(Duration.millis(750), this);
+		ftIn = new FadeTransition(Duration.millis(500), this);
 		ftIn.setFromValue(0);
 		ftIn.setToValue(1.0);
 		ftIn.setCycleCount(1);
-
 		
-		ftOut = new FadeTransition(Duration.millis(750), this);
+		
+		ftOut = new FadeTransition(Duration.millis(500), this);
 		ftOut.setFromValue(1.0);
 		ftOut.setToValue(0);
 		ftOut.setCycleCount(1);
@@ -33,9 +40,11 @@ public class AnimatedLabel extends Label{
 	
 	public void play(){
 		seqBlink.play();
+		getStyleClass().add("summaryLabel-active");
 	}
 	
 	public void stop(){
 		seqBlink.stop();
+		getStyleClass().remove("summaryLabel-active");
 	}
 }

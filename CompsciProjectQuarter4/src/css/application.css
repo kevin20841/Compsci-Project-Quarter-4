@@ -373,12 +373,18 @@
 .tab-header-background{
 	-fx-background-color: rgb(231,231,231);
 }
+
 .tab-pane .tab:selected
 {
     -fx-background-color: #FFF;
 }
 .tab:selected .tab-label { 
     -fx-alignment: CENTER;
+}
+.tab:left 
+{
+	-fx-background-color: #ddd;
+	-fx-border-width: 0;
 }
 
 
@@ -508,7 +514,6 @@
     -fx-background-insets: -0.2, 1, -1.4, 3;
     -fx-background-radius: 3, 2, 4, 0;
     -fx-prompt-text-fill: transparent;
-     -fx-font-size: 12;
    -fx-pref-height: 10;
 
 }
@@ -527,7 +532,6 @@
     -fx-background-insets: -0.2, 1, -1.4, 3;
     -fx-background-radius: 3, 2, 4, 0;
     -fx-prompt-text-fill: transparent;
-    -fx-font-size: 12;
    -fx-pref-height: 10;
 }
 
@@ -589,10 +593,12 @@
 }	
 
 .summaryLabel{
-   -fx-font-size: 13;
+   -fx-font-size: 14;
    -fx-font-family: "Courier New";
 }
-
+.summaryLabel-active{
+   -fx-font-weight: bold;
+}
 .summaryVBox{
 	-fx-padding: 20;
 	-fx-background-color: transparent;

@@ -23,6 +23,7 @@ public class OptionHBox extends HBox implements Playable{
 	 * Creates the playable panel. Creates two gifs.
 	 * @param width The Width of the panel.
 	 * @param p The parent of this node.
+	 * @param pa The page number
 	 */
 	public OptionHBox(int width, OptionSelect p, int pa) {
 		page = pa;

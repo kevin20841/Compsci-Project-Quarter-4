@@ -15,6 +15,7 @@ public class OptionButton extends Button implements Playable{
 	 * Creates itself without any style. 
 	 * @param t The content displayed in the button
 	 * @param value The value of the button
+	 * @param p The page number
 	 */
 	public OptionButton(String t, String value, int p){
 		setText(t);
@@ -27,6 +28,7 @@ public class OptionButton extends Button implements Playable{
 	 * @param t The content displayed in the button
 	 * @param value The value of the button
 	 * @param style The Style of the button ("top", "mid", or "bottom");
+	 * @param p the Page number
 	 */
 	public OptionButton(String t, String value, String style, int p){
 		setText(t);

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
+
 import javafx.print.*;
 import javafx.util.*;
 import javafx.geometry.Insets;
@@ -51,7 +52,7 @@ public class SettingHBox extends HBox{
 	private String[] headersOut = {"Date", "Student ID", "Student Name", "Grade", "Reason for leaving", 
 			"Excused By", "Time of Departure", "Time of Return", "Note Status"};
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	
+
 	/**
 	 * Initiliazes the elements of this class. 
 	 * @param p The parent class.
@@ -106,6 +107,12 @@ public class SettingHBox extends HBox{
 		changePasswordButton.getStyleClass().add("changePasswordButton");
 		changePasswordButton.setOnAction(e -> changePassword());
 
+		Button sendEmailButton = new Button("Send Report");
+		sendEmailButton.setPrefSize(150, 40);
+		sendEmailButton.setMinSize(150, 40);
+		sendEmailButton.setOnAction(e -> sendEmail());
+
+
 		Button closeButton = new Button("Close");
 		closeButton.setPrefSize(100, 40);
 		closeButton.setMinSize(100, 40);
@@ -113,7 +120,8 @@ public class SettingHBox extends HBox{
 		closeButton.getStyleClass().add("closeButton");
 
 		viewButtonHBox.getChildren().add(closeButton);
-		buttonVBox.getChildren().addAll(printButton, loadButton, saveButton, changePasswordButton);
+		buttonVBox.getChildren().addAll(printButton, loadButton, saveButton, 
+				changePasswordButton, sendEmailButton);
 
 		buttonVBox.setPadding(new Insets(15, 15, 15, 15));
 		buttonVBox.setSpacing(20);
@@ -261,7 +269,7 @@ public class SettingHBox extends HBox{
 					writer.print(text);
 					writer.close();
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 			}
@@ -650,7 +658,106 @@ public class SettingHBox extends HBox{
 		return tableSignOut;
 	}
 
+	public void sendEmail(){
+		Dialog<Pair<String, String>> dialog = new Dialog<>();
+		dialog.setTitle("Send Report");
+		dialog.setHeaderText("Please enter emails, seperated by commas");
+		ButtonType loginButtonType = new ButtonType("Send", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
+		TextArea emailTextArea = new TextArea();
+		emailTextArea.setWrapText(true);
+		ArrayList<String> emailList = EmailHandler.readEmailList();
+	
+
+
+
+
+		dialog.getDialogPane().setContent(emailTextArea);
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == loginButtonType) {
+				return new Pair<>(emailTextArea.getText(), "");
+			}
+			return null;
+		});
+
+		Node sendEmailButton = dialog.getDialogPane().lookupButton(loginButtonType);
+		sendEmailButton.setDisable(true);
+		if (emailList.size() != 0){
+			String temp = "";
+			for (int i = 0; i < emailList.size(); i++){
+				if (emailList.size() != 1 && i != emailList.size()-1){
+					temp = temp + emailList.get(i) + ", ";
+				}
+				else{
+					temp = temp + emailList.get(i);
+				}
+			}
+			emailTextArea.setText(temp);
+			String[] d = temp.split(",");
+			boolean valid = true;
+			for (int i =0; i < d.length; i++){
+				d[i] = d[i].trim();
+				if (!EmailHandler.isValidEmailAddress(d[i])){
+					valid = false;
+				}
+			}
+			if (valid){
+				sendEmailButton.setDisable(false);
+			}
+			else{
+				sendEmailButton.setDisable(true);
+			}
+		}
+
+		emailTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
+
+			String[] d = newValue.split(",");
+			boolean valid = true;
+			for (int i =0; i < d.length; i++){
+				d[i] = d[i].trim();
+				if (!EmailHandler.isValidEmailAddress(d[i])){
+					valid = false;
+				}
+			}
+			if (valid){
+				sendEmailButton.setDisable(false);
+				if (emailTextArea.getStyleClass().size() == 4){
+					emailTextArea.getStyleClass().remove(3);
+					
+				}
+
+			}
+			else{
+				sendEmailButton.setDisable(true);
+				if (emailTextArea.getStyleClass().size() == 4){
+					emailTextArea.getStyleClass().remove(3);
+					emailTextArea.getStyleClass().add("passwordTextField-error");
+				}
+				else if  (emailTextArea.getStyleClass().size() == 3){
+					emailTextArea.getStyleClass().add("passwordTextField-error");
+				}
+			}
+		});
+		dialog.getDialogPane().getStylesheets().add("css/application.css");
+		ButtonBar buttonBar = (ButtonBar)dialog.getDialogPane().lookup(".button-bar");
+		buttonBar.getButtons().get(0).getStyleClass().add("saveButton");
+		buttonBar.getButtons().get(1).getStyleClass().add("closeButton");
+		Optional<Pair<String, String>> result = dialog.showAndWait();
+
+		result.ifPresent(email -> {
+
+			String[] d = email.getKey().split(",");
+			ArrayList<String> destination = new ArrayList<String>();
+			for (String i : d){
+				destination.add(i.trim());
+			}
+			EmailHandler sendEmail = new EmailHandler("synergy.inc.smcs.2018@gmail.com", "synergy.inc", destination);
+			sendEmail.send();
+			String error = sendEmail.getError();
+			EmailHandler.writeEmailList(destination);
+		});
+	}
 
 
 }

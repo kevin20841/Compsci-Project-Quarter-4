@@ -154,14 +154,11 @@ public class EnterInfoTab extends Tab{
 
 	}
 
-
-
-
 	public void updateScrollPane(ArrayList<String> option){
-		
+
 		summaryLeftVBox.getChildren().clear();
 		ArrayList<AnimatedLabel> summaries = new ArrayList<AnimatedLabel>();
-		summaries.add(new AnimatedLabel("StudentID: " +student.getStudentID()));
+		summaries.add(new AnimatedLabel("Student ID: " +student.getStudentID()));
 		summaries.add(new AnimatedLabel("Name: " +student.getName() ));
 		summaries.add(new AnimatedLabel("Grade: " +student.getGrade()));
 
@@ -238,7 +235,7 @@ public class EnterInfoTab extends Tab{
 
 			LocalDate todayDate = LocalDate.now();
 			String date = todayDate.toString();
-			File f = new File("src/backup/" + date+"-IN.bup");
+			File f = new File("src/backup/" + date+"-IN.csv");
 			try {
 				f.createNewFile();
 			} catch (IOException e1) {
@@ -265,7 +262,7 @@ public class EnterInfoTab extends Tab{
 				e.printStackTrace();
 			}
 
-			f = new File("src/backup/" + date+"-OUT.bup");
+			f = new File("src/backup/" + date+"-OUT.csv");
 			try {
 				f.createNewFile();
 			} catch (IOException e1) {

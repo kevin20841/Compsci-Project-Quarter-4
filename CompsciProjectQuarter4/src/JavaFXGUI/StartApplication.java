@@ -2,6 +2,8 @@ package JavaFXGUI;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +22,7 @@ import backend.Student;
 import backend.StudentList;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
+import javafx.scene.image.*;
 @SuppressWarnings("restriction")
 /**
  * The Main class of the program. This class is run to initialize everything. 
@@ -49,18 +52,53 @@ public class StartApplication extends Application {
 		StudentList studentData =  readStudentDatabase("src/data/SchoolDatabase.mer", "d");
 		StudentList studentIn = new StudentList();
 		StudentList studentOutIn = new StudentList();
+		stage.getIcons().add(new Image("img/logo.jpg"));
 		
 		LocalDate todayDate = LocalDate.now();
 		String date = todayDate.toString();
-		File f = new File("src/backup/" + date+"-IN.bup");
+		File f = new File("src/backup/" + date+"-IN.csv");
 		if(f.exists() && !f.isDirectory()) { 
 			studentIn = readStudentDatabase(f.getPath(), "i");
 		}
+		else{
+			try {
+				f.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				PrintWriter printWriter = new PrintWriter (f);
+				printWriter.println("DATE,ID,NAME,GR,TIME,REASON,NOTE");
+				printWriter.close();
+			}
+			catch(IOException e1){
+				e1.printStackTrace();
+				
+			}
+		}
 
 		
-		f = new File("src/backup/" + date+"-OUT.bup");
+		f = new File("src/backup/" + date+"-OUT.csv");
 		if(f.exists() && !f.isDirectory()) { 
 			studentOutIn = readStudentDatabase(f.getPath(), "o");
+		}
+		else{
+			try {
+				f.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				PrintWriter printWriter = new PrintWriter (f);
+				printWriter.println("DATE,ID,NAME,GR,REASON,EXCUSED,TIME,ARRTIME,NOTE");
+				printWriter.close();
+			}
+			catch(IOException e1){
+				e1.printStackTrace();
+				
+			}
 		}
 
 		
