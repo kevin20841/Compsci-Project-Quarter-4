@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,7 +104,17 @@ public class StartApplication extends Application {
 				
 			}
 		}
+		for (int i = 0; i < 30; i ++){
+			LocalDate pastDate = todayDate.minusDays(40 + i);
+			date = pastDate.toString();
 
+			f = new File("src/backup/" + date+"-IN.csv");
+					
+			Files.deleteIfExists(f.toPath());
+			f = new File("src/backup/" + date+"-OUT.csv");
+			
+			Files.deleteIfExists(f.toPath());
+		}
 		
 		
 		data = new HashMap<String, StudentList>();
