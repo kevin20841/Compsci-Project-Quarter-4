@@ -8,4 +8,5 @@ public interface Playable {
 	public void play();
 	public void reverse();
 	public int getPage();
+	public void clear();
 }

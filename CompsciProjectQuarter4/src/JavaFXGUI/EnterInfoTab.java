@@ -64,7 +64,7 @@ public class EnterInfoTab extends Tab{
 
 
 
-		infoOptionSelect = new OptionSelect(700, 500, this, student);
+		infoOptionSelect = new OptionSelect(770, 550, this, student);
 
 		int version = 0;
 		if (goingIn){

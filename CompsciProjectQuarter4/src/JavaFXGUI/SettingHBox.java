@@ -1,5 +1,6 @@
 package JavaFXGUI;
 import java.io.File;
+import java.util.concurrent.atomic.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,7 +13,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
-
+import javafx.concurrent.WorkerStateEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.print.*;
 import javafx.util.*;
 import javafx.geometry.Insets;
@@ -23,6 +27,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.cell.*;
 import javafx.collections.*;
+import javafx.event.EventHandler;
 import backend.*;
 import javafx.scene.text.Text;
 import javafx.stage.*;
@@ -40,13 +45,14 @@ import javafx.scene.web.*;
 public class SettingHBox extends HBox{
 	private ObservableList<StudentProperty> goingIn = FXCollections.observableArrayList();
 	private ObservableList<StudentProperty> goingOutIn =FXCollections.observableArrayList();
-
+	private EmailHandler sendEmail;
 	private StartApplication parent;
 	private TableView tableSignOut;
 	private TableView tableSignIn;
 	private String passwordHash;
 	private String salt;
 	private HashMap<String, StudentList>data;
+	private AtomicBoolean busMode;
 	private String[] headers = {"Date", "Student ID", "Student Name", "Grade", "Time In", 
 			"Reason for Late Arrival", "Note Status"};
 	private String[] headersOut = {"Date", "Student ID", "Student Name", "Grade", "Reason for leaving", 
@@ -62,7 +68,8 @@ public class SettingHBox extends HBox{
 	 * @param s The salt of the password hash.
 	 */
 	public SettingHBox(StartApplication p, double width, 
-			HashMap<String, StudentList>d, String pHash, String s){
+			HashMap<String, StudentList>d, String pHash, String s, AtomicBoolean bmode){
+		busMode = bmode;
 		passwordHash = pHash;
 		salt = s;
 		data = d;
@@ -111,8 +118,14 @@ public class SettingHBox extends HBox{
 		sendEmailButton.setPrefSize(150, 40);
 		sendEmailButton.setMinSize(150, 40);
 		sendEmailButton.setOnAction(e -> sendEmail());
-
-
+		CheckBox checkBox = new CheckBox("Late Bus Mode");
+		checkBox.setSelected(busMode.get());
+		checkBox.selectedProperty().addListener((ov, old_val, new_val) ->
+		{
+			busMode.set(new_val);
+		}
+		);
+		
 		Button closeButton = new Button("Close");
 		closeButton.setPrefSize(100, 40);
 		closeButton.setMinSize(100, 40);
@@ -121,7 +134,7 @@ public class SettingHBox extends HBox{
 
 		viewButtonHBox.getChildren().add(closeButton);
 		buttonVBox.getChildren().addAll(printButton, loadButton, saveButton, 
-				changePasswordButton, sendEmailButton);
+				changePasswordButton, sendEmailButton, checkBox);
 
 		buttonVBox.setPadding(new Insets(15, 15, 15, 15));
 		buttonVBox.setSpacing(20);
@@ -668,7 +681,7 @@ public class SettingHBox extends HBox{
 		TextArea emailTextArea = new TextArea();
 		emailTextArea.setWrapText(true);
 		ArrayList<String> emailList = EmailHandler.readEmailList();
-	
+
 
 
 
@@ -724,7 +737,7 @@ public class SettingHBox extends HBox{
 				sendEmailButton.setDisable(false);
 				if (emailTextArea.getStyleClass().size() == 4){
 					emailTextArea.getStyleClass().remove(3);
-					
+
 				}
 
 			}
@@ -752,10 +765,14 @@ public class SettingHBox extends HBox{
 			for (String i : d){
 				destination.add(i.trim());
 			}
-			EmailHandler sendEmail = new EmailHandler("synergy.inc.smcs.2018@gmail.com", "synergy.inc", destination);
+			sendEmail = new EmailHandler("synergy.inc.smcs.2018@gmail.com", "synergy.inc", destination);
 			sendEmail.send();
-			String error = sendEmail.getError();
+
 			EmailHandler.writeEmailList(destination);
+
+
+
+
 		});
 	}
 

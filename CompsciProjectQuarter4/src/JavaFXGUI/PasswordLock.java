@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Scanner;
-
+import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.effect.*;
 import javafx.geometry.Insets;
 import javafx.scene.layout.*;
@@ -31,7 +31,8 @@ public class PasswordLock extends StackPane{
 	 * @param width The width of the child node.
 	 * @param d The data of the program.
 	 */
-	public PasswordLock(StartApplication p, double width, HashMap<String, StudentList>d){
+	public PasswordLock(StartApplication p, double width, HashMap<String, StudentList>d, 
+			AtomicBoolean busMode){
 		SecureRandom random = new SecureRandom();
 		salt = new BigInteger(130, random).toString(32);
 		Scanner configScanner = null;
@@ -80,7 +81,7 @@ public class PasswordLock extends StackPane{
 		buttonHBox.getChildren().addAll(cancelButton, submitButton);
 		passwordPanel.getChildren().addAll(optionLabel, passwordField, buttonHBox);
 		
-		optionBorderContentHBox = new SettingHBox(p, width, d, passwordHash, salt);
+		optionBorderContentHBox = new SettingHBox(p, width, d, passwordHash, salt, busMode);
         BoxBlur bb = new BoxBlur();
         bb.setIterations(3);
         optionBorderContentHBox.setEffect(bb);

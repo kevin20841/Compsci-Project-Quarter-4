@@ -16,7 +16,7 @@ public class ButtonHandler implements EventHandler<ActionEvent> {
 	private String val ;
 	private Playable button;
 	private OptionSelect parent;
-	boolean otherText;
+	private boolean otherText;
 	/**
 	 * Constructor  
 	 * @param opt The value of the button.
@@ -50,19 +50,25 @@ public class ButtonHandler implements EventHandler<ActionEvent> {
 			previous.add(null);
 		}
 	}
+	public ButtonHandler( Playable b, OptionSelect p, boolean oT) {
+
+		button = b;
+		parent = p;
+		otherText = oT;
+
+		if (button.getPage() == previous.size()){
+			previous.add(null);
+		}
+	}
+	public void setVal(String v){
+		val  =v;
+	}
 	/**
 	 * Handles the playing of the animation of buttons. Also calls addInfo() of 
 	 * optionSelect to add the information encoded in each button
 	 */
 	@Override
 	public void handle(ActionEvent event) {
-		if (otherText ==false){
-			parent.addInfo(val);
-		}
-		else{
-			parent.addInfo(((OptionHBox)(button)).getText());
-		}
-
 		if (previous.get(button.getPage()) == null){
 			button.play();
 			previous.set(button.getPage(), button); 
@@ -70,8 +76,19 @@ public class ButtonHandler implements EventHandler<ActionEvent> {
 		else if (button != previous.get(button.getPage())){
 			button.play();
 			previous.get(button.getPage()).reverse();
+			previous.get(button.getPage()).clear();
 			previous.set(button.getPage(), button);
 		}
+		if (otherText ==false){
+			parent.addInfo(val);
+		}
+		else{
+			parent.addInfo(((OptionHBox)(button)).getText());
+		}
+
+		
 	}
+	
+
 
 }

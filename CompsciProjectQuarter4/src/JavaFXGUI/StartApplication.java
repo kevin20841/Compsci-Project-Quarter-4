@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -35,8 +36,9 @@ public class StartApplication extends Application {
 	private BorderPane optionBorderPane;
 	private HashMap<String, StudentList> data;
 	private HBox contentPane;
+	private AtomicBoolean busMode = new AtomicBoolean(false);
 	public Stage stage;
-
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -110,7 +112,7 @@ public class StartApplication extends Application {
 		primaryStage.setTitle("Office Sign In"); //TODO Title
 		Group root = new Group();
 		Scene scene = new Scene(root, 1200, 750, Color.WHITE);
-		tabPane = new MenuTabPane(this, data);
+		tabPane = new MenuTabPane(this, data, busMode);
 
 		content = new StackPane();
 		BorderPane borderPane = new BorderPane();
@@ -155,7 +157,7 @@ public class StartApplication extends Application {
 
 	public void showOptionsPage(){
 		content.getChildren().add(optionBorderPane);
-		PasswordLock optionBorderContentHBox = new PasswordLock(this, stage.getWidth() - 102, data);
+		PasswordLock optionBorderContentHBox = new PasswordLock(this, stage.getWidth() - 102, data, busMode);
 		contentPane.getChildren().clear();
 		contentPane.getChildren().add(optionBorderContentHBox);
 		brightenTransition.play();
@@ -166,6 +168,7 @@ public class StartApplication extends Application {
 	 */
 	public void hideOptionsPage(){
 		content.getChildren().remove(optionBorderPane);
+		tabPane.init.switchMode();
 	}
 	/**
 	 * Reads from a mer file. A Mer file is a .csv with an extra row on the top for headers.

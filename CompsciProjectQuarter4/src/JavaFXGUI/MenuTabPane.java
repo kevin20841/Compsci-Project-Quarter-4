@@ -1,6 +1,7 @@
 package JavaFXGUI;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import backend.StudentList;
 import javafx.scene.control.*;
@@ -12,7 +13,7 @@ import javafx.scene.control.*;
 @SuppressWarnings("restriction")
 public class MenuTabPane extends TabPane{
 
-
+	public StartTab init;
 	public StartApplication parent;
 	/**	
 	 * Initializes a StartTab. Holds the public variable parent so that the StartTab can
@@ -21,13 +22,13 @@ public class MenuTabPane extends TabPane{
 	 * @param p The root node.
 	 * @param data The data of the program.
 	 */
-	public MenuTabPane(StartApplication p, HashMap<String, StudentList> data){
+	public MenuTabPane(StartApplication p, HashMap<String, StudentList> data, AtomicBoolean busMode){
 		setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-		StartTab init = new StartTab(this, "Start", data);
+		 init = new StartTab(this, "Start", data, busMode);
 		getTabs().addAll(init);
 		parent = p;
 	}
-
+	
 
 
 

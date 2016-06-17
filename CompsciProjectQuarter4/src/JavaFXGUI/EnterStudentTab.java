@@ -94,14 +94,14 @@ public class EnterStudentTab extends Tab {
 		photoIDView.setCache(true);
 
 		HBox labelHBox = new HBox();
-		imageHBox.setPadding(new Insets(15, 12, 15, 12));
-		imageHBox.setSpacing(10);
+
 
 		Label studentIDLabel = new Label("Enter student name or six-digit student id: ");
 		Button submitButton = new Button("Submit");
 		submitButton.setDefaultButton(true);
 		submitButton.setPrefSize(100, 20);
 		submitButton.setOnAction(e -> submitButton());
+		submitButton.getStyleClass().add("submitButton");
 
 		labelHBox.getChildren().addAll(studentIDLabel);
 		labelHBox.setAlignment(Pos.CENTER);

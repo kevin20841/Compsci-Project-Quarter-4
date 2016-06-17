@@ -42,7 +42,6 @@ public class OptionButton extends Button implements Playable{
 	 * Initializes the Button. Creates an AnimatedGif of a checkMark and an AnimatedGif of a checkMark closing.
 	 */
 	private void init(){
-
 		gfA1 = new AnimatedGif("src/img/gifCheckmark.gif", 500);
 		gfA1.setCycleCount(1);
 		setGraphic(gfA1.getView());
@@ -100,6 +99,8 @@ public class OptionButton extends Button implements Playable{
 	public boolean equals(OptionButton other){
 		return (valueText.equals(other.valueText));
 	}
-
+	public void clear(){
+		
+	}
 
 }

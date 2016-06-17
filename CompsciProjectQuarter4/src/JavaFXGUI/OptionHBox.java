@@ -1,11 +1,15 @@
 package JavaFXGUI;
 
+import java.util.Observable;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 import javafx.animation.FadeTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.*;
 import javafx.geometry.*;
 /**
@@ -25,17 +29,23 @@ public class OptionHBox extends HBox implements Playable{
 	 * @param p The parent of this node.
 	 * @param pa The page number
 	 */
-	public OptionHBox(int width, OptionSelect p, int pa) {
+	public OptionHBox(int width, OptionSelect p, int pa) { 
 		page = pa;
 		parent  = p;
-		
+		OptionHBox ref = this;
 		Label textFieldOtherLabel = new Label("Other: ");
 		textFieldOther = new TextField();
 		textFieldOther.setPrefWidth(width-300);
-		
-		Button textFieldOtherButton = new Button("Submit");
-		textFieldOtherButton.setOnAction(new ButtonHandler(textFieldOther.getText(), this, parent, true ));
-		textFieldOtherButton.getStyleClass().add("textFieldOtherButton");
+		ButtonHandler handler = new ButtonHandler( (Playable)ref, parent, true);
+		textFieldOther.textProperty().addListener((observable, oldVal, newVal)
+			->{
+				if (oldVal != newVal){
+					handler.setVal(newVal);
+					handler.handle(new ActionEvent());
+				}
+				
+			}
+		);
 		
 
 		gfA1 = new AnimatedGif("src/img/gifCheckmark.gif", 500);
@@ -45,7 +55,7 @@ public class OptionHBox extends HBox implements Playable{
 		gfA2 = new AnimatedGif("src/img/gifCheckmarkReverse.gif", 500);
 		gfA2.setCycleCount(1);
 		
-		getChildren().addAll(gfA1.getView(), textFieldOtherLabel, textFieldOther, textFieldOtherButton);
+		getChildren().addAll(gfA1.getView(), textFieldOtherLabel, textFieldOther);
 		setSpacing(10);
 		setAlignment(Pos.CENTER_LEFT);
 

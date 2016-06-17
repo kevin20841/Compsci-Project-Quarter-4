@@ -17,24 +17,18 @@ import javafx.scene.layout.*;
 public class AnimatedAlertBox extends HBox{
 	private SequentialTransition  seqT; 
 	private Label studentIDLabel;
-	
+	private boolean warning;
 	/**
 	 * Constructor
 	 * @param defText The default text.
 	 * @param warning Whether or not the Alert is a warning, red, or not, green.
 	 */
-	public AnimatedAlertBox(String defText, boolean warning){
+	public AnimatedAlertBox(String defText, boolean w){
+		warning = w;
 		setOpacity(0);
 		studentIDLabel = new Label(defText);
-		if (warning){
-			getStyleClass().add("alertMessage");
-			studentIDLabel.getStyleClass().add("alertText");
-		}
-		else{
-			getStyleClass().add("sucessMessage");
-			studentIDLabel.getStyleClass().add("sucessText");
-		}
 		
+		setStyle();
 		
 		getChildren().add(studentIDLabel);
 		setAlignment(Pos.CENTER);
@@ -54,6 +48,16 @@ public class AnimatedAlertBox extends HBox{
 		seqT = new SequentialTransition (ftIn, pt, ftOut);
 	}
 	
+	public void setStyle(){
+		if (warning){
+			getStyleClass().add("alertMessage");
+			studentIDLabel.getStyleClass().add("alertText");
+		}
+		else{
+			getStyleClass().add("sucessMessage");
+			studentIDLabel.getStyleClass().add("sucessText");
+		}
+	}
 	/**
 	 * Plays the animation (fades in and out) with a custom message.
 	 * @param mes The Message of the alert.
@@ -67,6 +71,10 @@ public class AnimatedAlertBox extends HBox{
 	 */
 	public void play(){
 		seqT.play();
+	}
+	public void setWarning(boolean w){
+		warning = w;
+		setStyle();
 	}
 	
 }
