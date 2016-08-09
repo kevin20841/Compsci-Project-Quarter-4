@@ -28,7 +28,18 @@ public class AnimatedAlertBox extends HBox{
 		setOpacity(0);
 		studentIDLabel = new Label(defText);
 		
-		setStyle();
+		if (warning){
+			
+			getStyleClass().add("alertMessage");
+			studentIDLabel.getStyleClass().add("alertText");
+			
+		}
+		else{
+			
+			getStyleClass().add("sucessMessage");
+			studentIDLabel.getStyleClass().add("sucessText");
+			
+		}
 		
 		getChildren().add(studentIDLabel);
 		setAlignment(Pos.CENTER);
@@ -50,12 +61,16 @@ public class AnimatedAlertBox extends HBox{
 	
 	public void setStyle(){
 		if (warning){
+			getStyleClass().remove(getStyleClass().size()-1);
 			getStyleClass().add("alertMessage");
 			studentIDLabel.getStyleClass().add("alertText");
+			studentIDLabel.getStyleClass().remove(getStyleClass().size()-1);
 		}
 		else{
+			getStyleClass().remove(getStyleClass().size()-1);
 			getStyleClass().add("sucessMessage");
 			studentIDLabel.getStyleClass().add("sucessText");
+			studentIDLabel.getStyleClass().remove(getStyleClass().size()-1);
 		}
 	}
 	/**

@@ -78,7 +78,7 @@ public class Student implements Comparable<Student>{
 
 
 	public String toString(){
-		return  String.format("%-15s", studentID) + String.format("%-26s", name) +grade;
+		return  "  " + String.format("%-37s", name) +grade;
 	}
 
 

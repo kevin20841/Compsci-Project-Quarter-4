@@ -57,7 +57,16 @@ public class StudentList {
 	 * @return	Returns the Student with that name.
 	 */
 	public Student getStudentByToString(String s){
-		return new Student(getStudentByID(s.split("\\s+")[0]));
+		String result = "";
+		for (int i= 2; i < s.length() - 1; i++){
+			if (s.charAt(i)  == ' ' && s.charAt(i + 1)  == ' '){
+				break;
+			}
+			else{
+				result = result + s.substring(i, i+1);
+			}
+		}
+		return new Student(getStudentByName(result));
 	}
 	/**
 	 * Gets list of names.

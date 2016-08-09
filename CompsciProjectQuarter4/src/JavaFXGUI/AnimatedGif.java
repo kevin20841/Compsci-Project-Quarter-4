@@ -31,6 +31,7 @@ public class AnimatedGif extends Animation {
         }
 
         super.init( sequence, durationMs);
+
     }
 
 }

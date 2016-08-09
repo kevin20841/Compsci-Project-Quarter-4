@@ -128,7 +128,8 @@ public class StartTab extends Tab {
 			imageHBox.setPadding(new Insets(15, 12, 15, 12));
 			imageHBox.setSpacing(10);
 
-			Label studentIDLabel = new Label("Enter student name or six-digit student id for late bus:: ");
+			Label studentIDLabel = new Label("Enter student name or six-digit student ID for late bus: ");
+			studentIDLabel.getStyleClass().add("studentIDLabel");
 			Button submitButton = new Button("Submit");
 			submitButton.setDefaultButton(true);
 			submitButton.setPrefSize(100, 20);
@@ -250,6 +251,7 @@ public class StartTab extends Tab {
 	}
 
 	public void submitButton(){
+		
 		searchTextField.requestFocus();
 		String selected = (String) list.getSelectionModel().getSelectedItem();
 		String submittedText = "";
@@ -273,7 +275,7 @@ public class StartTab extends Tab {
 			else{
 				if (searchTextField.getText().isEmpty()){
 					alert.setWarning(true);
-					;
+	
 					alert.play("Please submit your name or submit your ID.");
 				}
 				else{
@@ -293,7 +295,7 @@ public class StartTab extends Tab {
 	}
 
 	public void submit(String txt){
-		
+		searchTextField.clear();
 		LocalDate todayDate = LocalDate.now();
 		String date = todayDate.toString();
 		

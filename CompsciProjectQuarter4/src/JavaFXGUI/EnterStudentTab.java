@@ -96,7 +96,8 @@ public class EnterStudentTab extends Tab {
 		HBox labelHBox = new HBox();
 
 
-		Label studentIDLabel = new Label("Enter student name or six-digit student id: ");
+		Label studentIDLabel = new Label("Enter student name or six-digit student ID: ");
+		studentIDLabel.getStyleClass().add("studentIDLabel");
 		Button submitButton = new Button("Submit");
 		submitButton.setDefaultButton(true);
 		submitButton.setPrefSize(100, 20);
@@ -275,7 +276,6 @@ public class EnterStudentTab extends Tab {
 	 * @param student
 	 */
 	private void moveOn(boolean signIn, Student student){
-
 		EnterInfoTab tab3;
 		boolean outin = false;
 		int j = 0;
